@@ -1,4 +1,4 @@
-package com.library.activity
+package com.library.app.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.compose.rememberNavController
-import com.library.navigation.NavigationComponent
+import com.library.app.navigation.components.NavigationComponent
 import com.library.ui.theme.LibraryTheme
 import dagger.hilt.android.AndroidEntryPoint
 

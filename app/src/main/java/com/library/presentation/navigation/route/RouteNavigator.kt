@@ -1,4 +1,4 @@
-package com.library.navigation.route
+package com.library.presentation.navigation.route
 
 import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.library.navigation.route
+package com.library.presentation.navigation.route
 
 import android.app.Activity
 import androidx.compose.material3.windowsizeclass.WindowSizeClass

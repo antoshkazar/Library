@@ -67,6 +67,10 @@ dependencies {
     implementation(Libs.Di.hilt)
     implementation(Libs.Compose.hilt)
 
+    implementation(Libs.Core.retrofit)
+    implementation(Libs.Core.okHttpLoggingInterceptor)
+    implementation(Libs.Core.gsonConverter)
+
 
     kapt(Libs.Di.compiler)
 }
@@ -107,6 +111,14 @@ object Libs {
             "com.google.accompanist:accompanist-permissions:${Versions.accompanist}"
     }
 
+    object Core {
+        const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+        const val okHttpLoggingInterceptor =
+            "com.squareup.okhttp3:logging-interceptor:${Versions.okHttpLoggingInterceptor}"
+        const val gson = "com.google.code.gson:gson:${Versions.gson}"
+        const val gsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
+    }
+
 }
 
 object Versions {
@@ -114,6 +126,9 @@ object Versions {
 
     const val hilt = "2.48"
     const val navigation = "2.7.7"
+    const val gson = "2.10.1"
+    const val retrofit = "2.9.0"
+    const val okHttpLoggingInterceptor = "4.11.0"
 
     const val composeActivity = "1.8.2"
     const val composeJUnit = "1.5.3"

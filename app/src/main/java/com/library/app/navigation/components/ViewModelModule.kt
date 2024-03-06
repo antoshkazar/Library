@@ -1,7 +1,7 @@
-package com.library.navigation.components
+package com.library.app.navigation.components
 
-import com.library.navigation.route.RouteNavigator
-import com.library.navigation.route.RouteNavigatorImpl
+import com.library.presentation.navigation.route.RouteNavigator
+import com.library.presentation.navigation.route.RouteNavigatorImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

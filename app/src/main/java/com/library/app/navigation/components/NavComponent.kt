@@ -1,4 +1,4 @@
-package com.library.navigation
+package com.library.app.navigation.components
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.library.navigation.destinations.AuthRoute
+import com.library.app.navigation.route.AuthRoute
 
 @Composable
 fun NavigationComponent(
