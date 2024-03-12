@@ -10,9 +10,11 @@ interface ApiHandler {
     ): NetworkResult<T> {
         return try {
             val response = execute()
-            Log.d("response","$response")
+            Log.d("response itself","$response")
             val body = response.body()
-            Log.d("response","$body")
+            Log.d("response body","$body")
+            val raw = response.raw()
+            Log.d("response raw","$raw")
             if (response.isSuccessful && body != null) {
                 NetworkResult.Success(response.code(), body)
             } else {

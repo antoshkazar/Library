@@ -1,10 +1,10 @@
 package com.library.providers.api.sevices
 
 import retrofit2.Response
-import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface ApiServices {
-    @GET("/create_user?name=test&login=test&password=test1")
+    @POST("/create_user?name=test&login=test&password=test5")
     suspend fun createClient(): Response<String>
 }
 

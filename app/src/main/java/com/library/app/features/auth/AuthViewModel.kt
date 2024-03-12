@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val routeNavigator: RouteNavigator,
@@ -19,7 +20,7 @@ class AuthViewModel @Inject constructor(
     fun onButtonClick() {
         viewModelScope.launch {
             val str = libraryRepository.createClient().convertToDataState()
-            Log.d("hoe", str.toString())
+            Log.d("hoe3", str.toString())
         }
     }
 }

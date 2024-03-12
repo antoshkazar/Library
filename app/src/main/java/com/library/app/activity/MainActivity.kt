@@ -19,6 +19,7 @@ import com.library.app.navigation.components.NavigationComponent
 import com.library.ui.theme.LibraryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -30,14 +31,15 @@ class MainActivity : ComponentActivity() {
                 val windowSize = calculateWindowSizeClass(this)
                 val navController = rememberNavController()
 
-                Spacer(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(
-                        WindowInsets.statusBars
-                            .getTop(LocalDensity.current)
-                            .pxToDp()
-                    )
-                    .clipToBounds()
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(
+                            WindowInsets.statusBars
+                                .getTop(LocalDensity.current)
+                                .pxToDp()
+                        )
+                        .clipToBounds()
                 )
                 NavigationComponent(navHostController = navController, windowSize = windowSize)
             }
