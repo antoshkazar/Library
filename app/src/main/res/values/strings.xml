@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Library</string>
+    <string name="loading">Загрузка данных</string>
+    <string name="login">Войти</string>
 </resources>
