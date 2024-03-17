@@ -10,32 +10,40 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Brown60,
+    onPrimary = Brown20,
+    primaryContainer = Brown30,
+    onPrimaryContainer = Brown80,
+    inversePrimary = Brown40,
+    secondary = DarkBrown80,
+    onSecondary = DarkBrown20,
+    secondaryContainer = DarkBrown30,
+    onSecondaryContainer = DarkBrown80,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = Brown40,
     onPrimary = Color.White,
+    primaryContainer = Brown90,
+    onPrimaryContainer = Brown10,
+    inversePrimary = Brown80,
+    secondary = DarkBrown40,
     onSecondary = Color.White,
+    secondaryContainer = DarkBrown90,
+    onSecondaryContainer = DarkBrown10,
+    tertiary = TiffanyBlue40,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiaryContainer = TiffanyBlue80,
+    onTertiaryContainer = TiffanyBlue10,
 )
+
 
 @Composable
 fun LibraryTheme(

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,16 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.lenta.presentation.theme.TextPrimary
-import com.lenta.presentation.theme.adaptiveBody
-import com.lenta.presentation.theme.marginNormal16
-import com.lenta.presentation.theme.qualityTypography
 import com.library.R
 import com.library.presentation.theme.LibraryTypography
 import kotlinx.coroutines.delay
@@ -125,49 +119,18 @@ fun LoaderWidget(
                         modifier = Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        if (state.isShowTimer) {
-                            Text(
-                                text = "Время ожидания: ${ticks}s",
-                                style = LibraryTypography.bodyMedium,
-                                color = TextPrimary,
-                            )
-                        }
                         Text(
                             text = state.loaderText.ifBlank { stringResource(id = R.string.loading) },
-                            style = qualityTypography.headlineMedium,
-                            color = TextPrimary,
+                            style = LibraryTypography.headlineMedium,
                         )
                         if (currentAppAction.value.isNotEmpty()) {
                             Box {
                                 Text(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(
-                                            horizontal = when (windowSizeClass.widthSizeClass) {
-                                                WindowWidthSizeClass.Compact -> marginNormal16
-                                                WindowWidthSizeClass.Medium -> 0.dp
-                                                else -> 0.dp
-                                            },
-                                        ),
+                                        .fillMaxWidth(),
                                     text = currentAppAction.value + dots,
-                                    style = adaptiveBody(windowSizeClass),
-                                    color = TextPrimary,
-                                    textAlign = TextAlign.Center,
                                 )
                             }
-                        }
-                        if (state.isCancelable) {
-                            MainButton(
-                                uiData = ButtonUI(
-                                    text = stringResource(id = R.string.cancel),
-                                ),
-                                onClick = {
-                                    ticks = state.initTimerValueInSecond
-                                    onCancelClick()
-                                },
-                                modifier = Modifier.padding(16.dp),
-                                windowSizeClass = windowSizeClass,
-                            )
                         }
                     }
                 }
