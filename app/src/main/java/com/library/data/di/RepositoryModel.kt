@@ -15,17 +15,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+
+const val BASE_URL = "http://127.0.0.1:8000 "
+
 @Module
 @InstallIn(SingletonComponent::class)
 class RepositoryModel {
 
     @Singleton
     @Provides
-    fun provideBaseUrl(): String = "http://127.0.0.1:8000";
+    fun provideBaseUrl(): String = BASE_URL;
 
     @Singleton
     @Provides
-    fun interpt(): Interceptor {
+    fun provideInterceptor(): Interceptor {
         return HeaderInterceptor
     }
 
@@ -46,11 +49,10 @@ class RepositoryModel {
     }
 
     @Provides
-    fun provideRetrofit(baseUrl: String, client: OkHttpClient): Retrofit {
+    fun provideRetrofit(baseUrl: String): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(baseUrl)
-            .client(client)
             .build()
     }
 

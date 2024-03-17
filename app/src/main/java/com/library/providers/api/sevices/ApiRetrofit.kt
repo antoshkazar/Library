@@ -51,6 +51,6 @@ object HeaderInterceptor : Interceptor {
             .header("X-RapidAPI-Host", "moviesdatabase.p.rapidapi.com")
             .build()
 
-        return chain.proceed(modifiedRequest)
+        return chain.proceed(originalRequest)
     }
 }

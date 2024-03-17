@@ -23,8 +23,8 @@ class AuthViewModel @Inject constructor(
 
     fun onButtonClick() {
         viewModelScope.launch {
-            val str = libraryRepository.createClient().convertToDataState()
-            Log.d("hoe3", str.toString())
+            val str = libraryRepository.toggleServer().convertToDataState()
+            Log.d("toggle", str.toString())
         }
     }
 
