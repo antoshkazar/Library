@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.compose.rememberNavController
 import com.library.app.navigation.components.NavigationComponent
-import com.library.ui.theme.LibraryTheme
+import com.library.presentation.theme.LibraryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 

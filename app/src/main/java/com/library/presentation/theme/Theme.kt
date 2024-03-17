@@ -1,4 +1,4 @@
-package com.library.ui.theme
+package com.library.presentation.theme
 
 import android.app.Activity
 import android.os.Build
@@ -64,7 +64,7 @@ fun LibraryTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = LibraryTypography,
         content = content
     )
 }
