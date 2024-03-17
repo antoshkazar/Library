@@ -23,7 +23,8 @@ class AuthViewModel @Inject constructor(
 
     fun onButtonClick() {
         viewModelScope.launch {
-            val str = libraryRepository.toggleServer().convertToDataState()
+            val str = libraryRepository.getUser("1").convertToDataState()
+            login.value = str.toString()
             Log.d("toggle", str.toString())
         }
     }

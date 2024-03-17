@@ -3,18 +3,17 @@ package com.library.providers.api.sevices
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiServices {
-    @POST("/create_user?name=test&login=test&password=test5")
-    suspend fun createClient(): Response<String>
+    @POST("/create_user")
+    suspend fun createClient(
+        @Query("name") name: String,
+        @Query("login") login: String,
+        @Query("password") password: String
+    ): Response<String>
 
-    @GET("/get_user?user_id=1")
-    suspend fun toggleServer(): Response<Any>
+    @GET("/get_user")
+    suspend fun getUser(@Query("user_id") userId: String): Response<Any>
 }
-
-data class Client(
-    val name: String,
-    val password: String,
-    val login: String,
-)
 

@@ -58,8 +58,15 @@ dependencies {
     implementation(platform(Libs.BomCompose.bomCompose))
     implementation(Libs.BomCompose.composeTooling)
     implementation(Libs.BomCompose.materialWindowSize)
+//    implementation(Libs.Compose.lottie)
+//    implementation(Libs.Compose.lottieCompose)
 
     api(Libs.BomCompose.material3)
+    api(Libs.BomCompose.ui)
+    implementation(Libs.BomCompose.tooling)
+    implementation(Libs.BomCompose.foundation)
+    implementation(Libs.BomCompose.uiUtil)
+
 
     implementation(kotlin("stdlib-jdk8", Versions.kotlin))
     implementation(Libs.Compose.runtime)
@@ -91,6 +98,8 @@ object Libs {
         const val runtime = "androidx.compose.runtime:runtime"
         const val coil = "io.coil-kt:coil-compose:${Versions.coil}"
         const val hilt = "androidx.hilt:hilt-navigation-compose:${Versions.composeHiltNavigation}"
+        const val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.lottie}"
+        const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
     }
 
     object BomCompose {
@@ -104,6 +113,7 @@ object Libs {
         const val composeUiJUnit = "androidx.compose.ui:ui-test-junit4"
         const val composeUiManifest = "androidx.compose.ui:ui-test-manifest"
         const val composeTooling = "androidx.compose.ui:ui-tooling"
+        const val foundation = "androidx.compose.foundation:foundation"
     }
 
     object Accompanist {
@@ -137,6 +147,7 @@ object Versions {
     const val composeHiltNavigation = "1.0.0"
     const val coil = "2.3.0"
 
+    const val lottie = "6.4.0"
     const val bomCompose = "2023.08.00"
     const val accompanist = "0.32.0"
 }

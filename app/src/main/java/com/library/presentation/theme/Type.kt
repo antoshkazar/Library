@@ -16,6 +16,13 @@ val futuraPTFontFamily = FontFamily(
     Font(resId = R.font.futura_pt_bold, weight = FontWeight.ExtraBold),
 )
 
+val LibraryHeaderStyle = TextStyle(
+    fontFamily = FontFamily(Font(resId = R.font.dancing_script_medium, weight = FontWeight.Normal)),
+    fontWeight = FontWeight.Medium,
+    fontSize = 32.sp,
+    lineHeight = 40.sp,
+)
+
 // Set of Material typography styles to start with
 val LibraryTypography = Typography(
     headlineLarge = TextStyle(

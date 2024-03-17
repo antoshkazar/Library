@@ -25,6 +25,7 @@ import com.library.presentation.composables.containers.Screen
 import com.library.presentation.composables.input.InputTextField
 import com.library.presentation.composables.input.InputTextFieldUI
 import com.library.presentation.composables.input.InputType
+import com.library.presentation.theme.LibraryHeaderStyle
 
 @Composable
 fun AuthScreen(
@@ -33,7 +34,6 @@ fun AuthScreen(
 ) {
 
     val login by remember { viewModel.login }
-
     val password by remember { viewModel.password }
 
     val localFocusManager = LocalFocusManager.current
@@ -45,7 +45,12 @@ fun AuthScreen(
                     localFocusManager.clearFocus()
                 })
             },
+            isNeedToShowNavigationBar = false,
             content = {
+               // AnimatedBook(modifier = Modifier.wrapContentSize())
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = stringResource(id = R.string.my_library), style = LibraryHeaderStyle)
+                Spacer(modifier = Modifier.height(32.dp))
                 Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center)
                 {
 

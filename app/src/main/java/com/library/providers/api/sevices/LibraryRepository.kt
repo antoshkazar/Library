@@ -7,17 +7,31 @@ import javax.inject.Inject
 class LibraryRepositoryImpl @Inject constructor(
     private val apiServices: ApiServices
 ) : LibraryRepository, ApiHandler {
-    override suspend fun createClient(): NetworkResult<String> {
-        return handleApi { apiServices.createClient() }
+    override suspend fun createClient(
+        name: String,
+        login: String,
+        password: String
+    ): NetworkResult<String> {
+        return handleApi {
+            apiServices.createClient(
+                name = name,
+                login = login,
+                password = password
+            )
+        }
     }
 
-    override suspend fun toggleServer(): NetworkResult<Any> {
-        return handleApi { apiServices.toggleServer() }
+    override suspend fun getUser(userId: String): NetworkResult<Any> {
+        return handleApi { apiServices.getUser(userId) }
     }
 }
 
 interface LibraryRepository {
 
-    suspend fun toggleServer(): NetworkResult<Any>
-    suspend fun createClient(): NetworkResult<String>
+    suspend fun getUser(userId: String): NetworkResult<Any>
+    suspend fun createClient(
+        name: String,
+        login: String,
+        password: String
+    ): NetworkResult<String>
 }
