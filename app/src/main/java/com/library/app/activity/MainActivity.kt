@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.library.app.navigation.components.NavigationComponent
 import com.library.presentation.theme.LibraryTheme
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             LibraryTheme {
                 val windowSize = calculateWindowSizeClass(this)

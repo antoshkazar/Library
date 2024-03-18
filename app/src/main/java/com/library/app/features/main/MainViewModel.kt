@@ -15,17 +15,23 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel(), RouteNavigator by routeNavigator {
     val books = mutableStateOf(
         listOf(
-            BookUi(title ="3 Мушкетера"),
-            BookUi(title ="Война и мир"),
-            BookUi(title ="Анна Каренина"),
-            BookUi(title ="Бесы")
+            BookUi(title = "3 Мушкетера"),
+            BookUi(title = "Война и мир"),
+            BookUi(title = "Анна Каренина"),
+            BookUi(title = "Бесы"),
+            BookUi(title = "Мартышка и очки")
         )
     )
     val searchText = mutableStateOf("")
     val isSearching = mutableStateOf(false)
+    val searchHistory = mutableStateOf(listOf("wados", "ajfdb"))
 
     fun onSearchTextChange(text: String) {
         searchText.value = text
+    }
+
+    fun onAddBookClick() {
+
     }
 
     fun onToggleSearch() {

@@ -22,12 +22,16 @@ class AuthViewModel @Inject constructor(
     val password = mutableStateOf("")
     val login = mutableStateOf("")
 
-    fun onButtonClick() {
+    fun onLoginClick() {
         viewModelScope.launch {
             val str = libraryRepository.getUser("1").convertToDataState()
             Log.d("toggle", str.toString())
         }
         navigateToRoute(MainRoute.route)
+    }
+
+    fun onRegisterClick() {
+        
     }
 
     fun onPasswordChange(value: String) {

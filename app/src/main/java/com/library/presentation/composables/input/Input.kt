@@ -1,16 +1,15 @@
 package com.library.presentation.composables.input
 
 import android.view.KeyEvent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,10 +93,10 @@ data class InputTextFieldUI(
     val keyboardImeAction: ImeAction? = null,
     val decimalPartNumberCount: Int = 0,
     val imeAction: ImeAction = ImeAction.None,
+    val label: String = "",
 )
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(showBackground = true)
 @Composable
 fun InputTextField(
@@ -122,134 +121,131 @@ fun InputTextField(
             && uiData.type == InputType.PASSWORD
             && uiData.text.isNotEmpty()
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-    ) {
-        TextField(
-            modifier = textFieldModifier
-                .onFocusChanged { focusState ->
-                    hasFocus = focusState.isFocused
-                    onFocusChange(focusState.hasFocus)
-                }
-                .fillMaxWidth()
-                .onKeyEvent {
-                    if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                        val canHandleEndIconAction = !isClearTextMode
-                                && !isShowPasswordMode
-                                && uiData.endIconResId != null
+    OutlinedTextField(
+        modifier = textFieldModifier
+            .onFocusChanged { focusState ->
+                hasFocus = focusState.isFocused
+                onFocusChange(focusState.hasFocus)
+            }
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp)
+            .onKeyEvent {
+                if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    val canHandleEndIconAction = !isClearTextMode
+                            && !isShowPasswordMode
+                            && uiData.endIconResId != null
 
-                        if (canHandleEndIconAction) {
-                            endIconAction(uiData.text)
-                            focusManager.clearFocus()
-                            true
-                        } else {
-                            false
-                        }
+                    if (canHandleEndIconAction) {
+                        endIconAction(uiData.text)
+                        focusManager.clearFocus()
+                        true
                     } else {
                         false
                     }
-                },
-            value = uiData.text,
-            textStyle = uiData.textStyle,
-            placeholder = {
-                Text(
-                    text = uiData.placeHolderText,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = uiData.textStyle,
-                )
-            },
-            enabled = uiData.enabled,
-            singleLine = true,
-            maxLines = 1,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                autoCorrect = true,
-                keyboardType = when (uiData.type) {
-                    InputType.TEXT,
-                    InputType.PASSWORD -> KeyboardType.Text
-
-                    InputType.NUMERIC -> KeyboardType.NumberPassword
-                    InputType.NUMERIC_DOTTED -> KeyboardType.Number
-                },
-                imeAction = uiData.keyboardImeAction ?: when (uiData.type) {
-                    InputType.TEXT -> when {
-                        uiData.imeAction != ImeAction.None -> uiData.imeAction
-                        uiData.endIconResId != null -> ImeAction.Done
-                        else -> ImeAction.Next
-                    }
-
-                    InputType.PASSWORD -> ImeAction.Done
-                    InputType.NUMERIC -> ImeAction.Done
-                    InputType.NUMERIC_DOTTED -> ImeAction.Done
-                }
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = {
-                    focusManager.moveFocus(FocusDirection.Next)
-                },
-                onDone = {
-                    if (callIconActionOnFinish) {
-                        endIconAction(uiData.text)
-                    }
-                    focusManager.clearFocus()
-                    extraOnDoneAction()
-                }
-            ),
-
-            visualTransformation = when (uiData.type) {
-                InputType.TEXT,
-                InputType.NUMERIC_DOTTED,
-                InputType.NUMERIC -> VisualTransformation.None
-
-                InputType.PASSWORD -> if (showPassword.value) {
-                    VisualTransformation.None
                 } else {
-                    PasswordVisualTransformation()
+                    false
                 }
             },
-            isError = uiData.hasError,
-            onValueChange = { textValue ->
-                val out = textValue.toSingleTrimIndent()
-                if (out.length <= uiData.lengthLimit) {
-                    onValueChange(out)
-                }
+        label = { Text(uiData.label) },
+        value = uiData.text,
+        textStyle = uiData.textStyle,
+        placeholder = {
+            Text(
+                text = uiData.placeHolderText,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = uiData.textStyle,
+            )
+        },
+        enabled = uiData.enabled,
+        singleLine = true,
+        maxLines = 1,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            autoCorrect = true,
+            keyboardType = when (uiData.type) {
+                InputType.TEXT,
+                InputType.PASSWORD -> KeyboardType.Text
+
+                InputType.NUMERIC -> KeyboardType.NumberPassword
+                InputType.NUMERIC_DOTTED -> KeyboardType.Number
             },
-            trailingIcon = {
-                when {
-                    isClearTextMode -> IconButton(onClick = { onValueChange("") }) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            painter = painterResource(R.drawable.ic32_close),
-                            contentDescription = "clear text",
-                        )
-                    }
-
-                    isShowPasswordMode -> IconButton(
-                        onClick = { showPassword.value = showPassword.value.not() }) {
-                        EyeToggle(
-                            checked = showPassword.value,
-                        )
-                    }
-
-                    uiData.endIconResId != null -> IconButton(
-                        onClick = {
-                            focusManager.clearFocus()
-                            endIconAction(uiData.text)
-                        },
-                        enabled = uiData.enabled,
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            painter = painterResource(uiData.endIconResId),
-                            contentDescription = null,
-                        )
-                    }
-
-                    else -> Unit
+            imeAction = uiData.keyboardImeAction ?: when (uiData.type) {
+                InputType.TEXT -> when {
+                    uiData.imeAction != ImeAction.None -> uiData.imeAction
+                    uiData.endIconResId != null -> ImeAction.Done
+                    else -> ImeAction.Next
                 }
+
+                InputType.PASSWORD -> ImeAction.Done
+                InputType.NUMERIC -> ImeAction.Done
+                InputType.NUMERIC_DOTTED -> ImeAction.Done
+            }
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = {
+                focusManager.moveFocus(FocusDirection.Next)
             },
-        )
-    }
+            onDone = {
+                if (callIconActionOnFinish) {
+                    endIconAction(uiData.text)
+                }
+                focusManager.clearFocus()
+                extraOnDoneAction()
+            }
+        ),
+
+        visualTransformation = when (uiData.type) {
+            InputType.TEXT,
+            InputType.NUMERIC_DOTTED,
+            InputType.NUMERIC -> VisualTransformation.None
+
+            InputType.PASSWORD -> if (showPassword.value) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            }
+        },
+        isError = uiData.hasError,
+        onValueChange = { textValue ->
+            val out = textValue.toSingleTrimIndent()
+            if (out.length <= uiData.lengthLimit) {
+                onValueChange(out)
+            }
+        },
+        trailingIcon = {
+            when {
+                isClearTextMode -> IconButton(onClick = { onValueChange("") }) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(R.drawable.ic32_close),
+                        contentDescription = "clear text",
+                    )
+                }
+
+                isShowPasswordMode -> IconButton(
+                    onClick = { showPassword.value = showPassword.value.not() }) {
+                    EyeToggle(
+                        checked = showPassword.value,
+                    )
+                }
+
+                uiData.endIconResId != null -> IconButton(
+                    onClick = {
+                        focusManager.clearFocus()
+                        endIconAction(uiData.text)
+                    },
+                    enabled = uiData.enabled,
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(uiData.endIconResId),
+                        contentDescription = null,
+                    )
+                }
+
+                else -> Unit
+            }
+        },
+    )
 }
 

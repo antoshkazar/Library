@@ -1,4 +1,4 @@
-package com.library.presentation.composables.containers
+package com.library.presentation.composables.books
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -12,16 +12,13 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.compose.rememberNavController
 import com.library.presentation.BaseViewModel
 
 data class ScaffoldUI(
@@ -34,7 +31,6 @@ data class ScaffoldUI(
     val content: @Composable ColumnScope.() -> Unit = {},
 )
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun <T : BaseViewModel> Screen(
     viewModel: T,
@@ -47,12 +43,11 @@ fun <T : BaseViewModel> Screen(
 
     val loaderUI by remember { viewModel.progressState }
     val tabBarItems = generateNavigationBarItems()
-    val navController = rememberNavController()
 
     ScaffoldWithNetwork(
         modifier = scaffoldUI.modifier,
         topBar = scaffoldUI.topBar,
-        bottomBar = { TabView(tabBarItems) },
+        bottomBar = { if (scaffoldUI.isNeedToShowNavigationBar) TabView(tabBarItems) },
         loaderWidgetUI = loaderUI,
         containerColor = scaffoldUI.containerColor
     ) {
