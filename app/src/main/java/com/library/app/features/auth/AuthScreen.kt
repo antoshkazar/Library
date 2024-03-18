@@ -33,7 +33,6 @@ import com.library.presentation.composables.containers.Screen
 import com.library.presentation.composables.input.InputTextField
 import com.library.presentation.composables.input.InputTextFieldUI
 import com.library.presentation.composables.input.InputType
-import com.library.presentation.theme.LibraryHeaderStyle
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,6 +44,11 @@ fun AuthScreen(
 
     val login by remember { viewModel.login }
     val password by remember { viewModel.password }
+
+    val registrationLogin by remember { viewModel.registrationLogin }
+    val registrationPassword by remember { viewModel.registrationPassword }
+    val registrationName by remember { viewModel.registrationName }
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showRegistrationBottomSheet by remember { mutableStateOf(false) }
@@ -62,30 +66,16 @@ fun AuthScreen(
             content = {
                 //AnimatedBook(modifier = Modifier.wrapContentSize())
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = stringResource(id = R.string.my_library), style = LibraryHeaderStyle)
+                //Text(text = stringResource(id = R.string.my_library), style = LibraryHeaderStyle)
                 Spacer(modifier = Modifier.height(32.dp))
                 Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center)
                 {
 
-                    InputTextField(
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                        uiData = InputTextFieldUI(
-                            text = login,
-                            label = stringResource(id = R.string.login)
-                        ),
-                        onValueChange = viewModel::onLoginChange
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    InputTextField(
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                        uiData = InputTextFieldUI(
-                            text = password,
-                            type = InputType.PASSWORD,
-                            label = stringResource(id = R.string.password)
-                        ),
-                        onValueChange = viewModel::onPasswordChange
+                    LoginAndPassword(
+                        login = login,
+                        password = password,
+                        onLoginChange = viewModel::onLoginChange,
+                        onPasswordChange = viewModel::onPasswordChange,
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -123,19 +113,72 @@ fun AuthScreen(
                             sheetState = sheetState
                         ) {
 
-                            Button(onClick = {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showRegistrationBottomSheet = false
+                            InputTextField(
+                                modifier = Modifier.padding(horizontal = 24.dp),
+                                uiData = InputTextFieldUI(
+                                    text = registrationName,
+                                    label = stringResource(id = R.string.name)
+                                ),
+                                onValueChange = viewModel::onRegistrationNameChange,
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            LoginAndPassword(
+                                login = registrationLogin,
+                                password = registrationPassword,
+                                onLoginChange = viewModel::onRegistrationLoginChange,
+                                onPasswordChange = viewModel::onRegistrationPasswordChange,
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 24.dp),
+                                onClick = {
+                                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                        if (!sheetState.isVisible) {
+                                            showRegistrationBottomSheet = false
+                                        }
                                     }
-                                }
-                            }) {
-                                Text("Hide bottom sheet")
+                                    viewModel.onRegisterClick()
+                                }) {
+                                Text(text = stringResource(id = R.string.register))
                             }
                         }
                     }
                 }
             }
         )
+    )
+}
+
+@Composable
+private fun LoginAndPassword(
+    login: String,
+    password: String,
+    onLoginChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+) {
+    InputTextField(
+        modifier = Modifier.padding(horizontal = 24.dp),
+        uiData = InputTextFieldUI(
+            text = login,
+            label = stringResource(id = R.string.login)
+        ),
+        onValueChange = onLoginChange,
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    InputTextField(
+        modifier = Modifier.padding(horizontal = 24.dp),
+        uiData = InputTextFieldUI(
+            text = password,
+            type = InputType.PASSWORD,
+            label = stringResource(id = R.string.password)
+        ),
+        onValueChange = onPasswordChange,
     )
 }

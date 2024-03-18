@@ -3,6 +3,7 @@
     <string name="loading">Loading data</string>
     <string name="enter">Sign in</string>
     <string name="my_library">Your \n library</string>
+    <string name="name">Your name</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="register">Register</string>

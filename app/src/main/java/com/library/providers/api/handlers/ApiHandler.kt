@@ -1,5 +1,6 @@
 package com.library.providers.api.handlers
 
+import android.util.Log
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -10,6 +11,7 @@ interface ApiHandler {
         return try {
             val response = execute()
             val body = response.body()
+            Log.d("response: ", response.toString())
             if (response.isSuccessful && body != null) {
                 NetworkResult.Success(response.code(), body)
             } else {

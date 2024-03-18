@@ -11,9 +11,15 @@ interface ApiServices {
         @Query("name") name: String,
         @Query("login") login: String,
         @Query("password") password: String
-    ): Response<String>
+    ): Response<Any>
 
     @GET("/get_user")
     suspend fun getUser(@Query("user_id") userId: String): Response<Any>
+
+    @GET("/get_user_by_login")
+    suspend fun getUserByLogin(
+        @Query("login") login: String,
+        @Query("password") password: String
+    ): Response<Any>
 }
 

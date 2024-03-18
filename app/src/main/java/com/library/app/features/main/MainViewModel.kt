@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.library.data.models.books.BookUi
 import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
-import com.library.providers.api.sevices.LibraryRepository
+import com.library.providers.api.sevices.data.LibraryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

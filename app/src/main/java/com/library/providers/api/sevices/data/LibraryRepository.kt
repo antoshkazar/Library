@@ -1,7 +1,8 @@
-package com.library.providers.api.sevices
+package com.library.providers.api.sevices.data
 
 import com.library.providers.api.handlers.ApiHandler
 import com.library.providers.api.handlers.NetworkResult
+import com.library.providers.api.sevices.ApiServices
 import javax.inject.Inject
 
 class LibraryRepositoryImpl @Inject constructor(
@@ -11,7 +12,7 @@ class LibraryRepositoryImpl @Inject constructor(
         name: String,
         login: String,
         password: String
-    ): NetworkResult<String> {
+    ): NetworkResult<Any> {
         return handleApi {
             apiServices.createClient(
                 name = name,
@@ -24,14 +25,24 @@ class LibraryRepositoryImpl @Inject constructor(
     override suspend fun getUser(userId: String): NetworkResult<Any> {
         return handleApi { apiServices.getUser(userId) }
     }
+
+    override suspend fun getUserByLogin(login: String, password: String): NetworkResult<Any> {
+        return handleApi { apiServices.getUserByLogin(login = login, password = password) }
+    }
 }
 
 interface LibraryRepository {
 
     suspend fun getUser(userId: String): NetworkResult<Any>
+
+    suspend fun getUserByLogin(
+        login: String,
+        password: String
+    ): NetworkResult<Any>
+
     suspend fun createClient(
         name: String,
         login: String,
         password: String
-    ): NetworkResult<String>
+    ): NetworkResult<Any>
 }

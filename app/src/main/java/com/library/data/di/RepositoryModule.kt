@@ -2,8 +2,8 @@ package com.library.data.di
 
 import com.library.providers.api.sevices.ApiServices
 import com.library.providers.api.sevices.HeaderInterceptor
-import com.library.providers.api.sevices.LibraryRepository
-import com.library.providers.api.sevices.LibraryRepositoryImpl
+import com.library.providers.api.sevices.data.LibraryRepository
+import com.library.providers.api.sevices.data.LibraryRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
-const val BASE_URL = "http://127.0.0.1:8000 "
+const val BASE_URL = "http://127.0.0.1:8000"
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RepositoryModel {
+class RepositoryModule {
 
     @Singleton
     @Provides
