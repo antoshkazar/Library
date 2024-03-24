@@ -56,6 +56,7 @@ fun AuthScreen(
     val localFocusManager = LocalFocusManager.current
     Screen(
         viewModel = viewModel,
+        onScreenLaunch = viewModel::onScreenLaunch,
         scaffoldUI = ScaffoldUI(
             modifier = Modifier.pointerInput(Unit) {
                 detectTapGestures(onTap = {

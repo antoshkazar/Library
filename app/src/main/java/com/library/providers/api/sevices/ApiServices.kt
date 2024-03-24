@@ -21,4 +21,3 @@ interface ApiServices {
         @Query("password") password: String
     ): Response<Any>
 }
-

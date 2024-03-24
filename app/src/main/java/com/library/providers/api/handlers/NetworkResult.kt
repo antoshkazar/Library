@@ -1,9 +1,9 @@
 package com.library.providers.api.handlers
 
 sealed class NetworkResult<T : Any> {
-    class Success<T: Any>(val code: Int,val data: T) : NetworkResult<T>()
-    class Error<T: Any>(val code: Int, val errorMsg: String?) : NetworkResult<T>()
-    class Exception<T: Any>(val e: Throwable) : NetworkResult<T>()
+    class Success<T : Any>(val code: Int, val data: T) : NetworkResult<T>()
+    class Error<T : Any>(val code: Int, val errorMsg: String?) : NetworkResult<T>()
+    class Exception<T : Any>(val e: Throwable) : NetworkResult<T>()
 }
 
 sealed class DataState<out T : Any> {
@@ -15,7 +15,14 @@ sealed class DataState<out T : Any> {
 
 fun <T : Any> NetworkResult<T>.convertToDataState(): DataState<T> {
     return when (this) {
-        is NetworkResult.Success -> DataState.Success(this.data)
+        is NetworkResult.Success -> {
+            if (this.data.toString().contains("Error")) {
+                DataState.Failure(this.data.toString())
+            } else {
+                DataState.Success(this.data)
+            }
+        }
+
         is NetworkResult.Error -> DataState.Failure(this.errorMsg)
         is NetworkResult.Exception -> DataState.Failure(this.e.message)
     }

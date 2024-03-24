@@ -10,6 +10,7 @@ import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
 import com.library.providers.api.handlers.convertToDataState
 import com.library.providers.api.sevices.data.LibraryRepository
+import com.library.providers.auth.AuthPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val routeNavigator: RouteNavigator,
     private val libraryRepository: LibraryRepository,
+    private val authPreference: AuthPreference,
 ) : BaseViewModel(), RouteNavigator by routeNavigator {
 
     val password = mutableStateOf("")
@@ -27,15 +29,19 @@ class AuthViewModel @Inject constructor(
     val registrationPassword = mutableStateOf("")
     val registrationName = mutableStateOf("")
 
+    fun onScreenLaunch() {
+        login.value = authPreference.login
+    }
+
     fun onLoginClick() {
         viewModelScope.launch {
-            val str = libraryRepository.getUserByLogin(
+            libraryRepository.getUserByLogin(
                 login = login.value,
                 password = password.value
             ).convertToDataState().doIfSuccess {
+                authPreference.saveUserLogin(login = login.value)
                 navigateToRoute(MainRoute.route)
             }
-            Log.d("login", str.toString())
         }
     }
 
@@ -46,6 +52,7 @@ class AuthViewModel @Inject constructor(
                 login = registrationLogin.value,
                 password = registrationPassword.value
             ).convertToDataState().doIfSuccess {
+                authPreference.saveUserLogin(login = login.value)
                 navigateToRoute(MainRoute.route)
             }.doIfFailure {
                 Log.d("Failure:", it)

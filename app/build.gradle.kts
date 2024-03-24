@@ -78,7 +78,10 @@ dependencies {
     implementation(Libs.Core.retrofit)
     implementation(Libs.Core.okHttpLoggingInterceptor)
     implementation(Libs.Core.gsonConverter)
+    implementation(Libs.Common.kotpref)
+    implementation(Libs.Common.kotprefSupport)
 
+    implementation(Libs.MlKit.mlKit)
 
     kapt(Libs.Di.compiler)
 }
@@ -101,6 +104,10 @@ object Libs {
         const val hilt = "androidx.hilt:hilt-navigation-compose:${Versions.composeHiltNavigation}"
         const val lottieCompose = "com.airbnb.android:lottie-compose:${Versions.lottie}"
         const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
+    }
+
+    object MlKit {
+        const val mlKit = "com.google.mlkit:barcode-scanning:${Versions.mlKit}"
     }
 
     object BomCompose {
@@ -130,9 +137,16 @@ object Libs {
         const val gsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
     }
 
+    object Common {
+        const val kotpref = "com.chibatching.kotpref:kotpref:${Versions.kotPref}"
+        const val kotprefSupport = "com.chibatching.kotpref:livedata-support:${Versions.kotPref}"
+    }
+
 }
 
 object Versions {
+
+    const val kotPref: String = "2.13.2"
     const val kotlin = "1.9.22"
 
     const val hilt = "2.48"
@@ -147,6 +161,7 @@ object Versions {
     const val composeViewModel = "2.6.0"
     const val composeHiltNavigation = "1.0.0"
     const val coil = "2.3.0"
+    const val mlKit = "17.2.0"
 
     const val lottie = "6.4.0"
     const val bomCompose = "2023.08.00"
