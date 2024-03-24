@@ -7,4 +7,6 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="register">Register</string>
+    <string name="category">Category</string>
+    <string name="publication_year">Publication year</string>
 </resources>

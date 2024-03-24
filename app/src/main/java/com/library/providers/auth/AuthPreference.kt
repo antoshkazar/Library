@@ -11,18 +11,20 @@ internal class AuthPreferenceImpl @Inject constructor(context: Context) : BasePr
         this.login = login
     }
 
+    override var name: String by stringPref("")
     override var login: String by stringPref("")
-    override var userId: String by stringPref("")
+    override var rootGroupId: String by stringPref("")
 
     override fun clear() {
         login = ""
-        userId = ""
+        rootGroupId = ""
         super.clear()
     }
 }
 
 interface AuthPreference {
     fun saveUserLogin(login: String)
+    var name: String
     var login: String
-    var userId: String
+    var rootGroupId: String
 }

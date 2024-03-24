@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.library.app.navigation.route.BookRoute
 import com.library.core.extensions.addToList
 import com.library.core.extensions.doIfSuccess
 import com.library.data.models.books.BookUi
@@ -79,5 +80,9 @@ class MainViewModel @Inject constructor(
         if (!isSearching.value) {
             onSearchTextChange("")
         }
+    }
+
+    fun onBookClick(bookUi: BookUi) {
+        navigateToRoute(BookRoute.routeWithParams(bookUi = bookUi))
     }
 }

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -124,7 +125,9 @@ fun MainScreen(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             books.forEach { bookUi ->
-                                BookView(bookUi = bookUi)
+                                BookView(
+                                    bookUi = bookUi,
+                                    modifier = Modifier.clickable { viewModel.onBookClick(bookUi) })
                             }
                             AddBookView(
                                 onAddBookClick = {
