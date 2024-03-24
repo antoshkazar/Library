@@ -42,3 +42,17 @@ fun Context.createImageFile(): File {
     )
     return image
 }
+
+fun <T> List<T>.addIf(condition: Boolean, element: T): List<T> {
+    val mutableList = this.toMutableList()
+    if (condition) {
+        mutableList.add(element)
+    }
+    return mutableList
+}
+
+fun <T> List<T>.addToList(element: T): List<T> {
+    val mutableList = this.toMutableList()
+    mutableList.add(element)
+    return mutableList
+}

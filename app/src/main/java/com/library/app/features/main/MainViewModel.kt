@@ -5,9 +5,12 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.library.core.extensions.addToList
+import com.library.core.extensions.doIfSuccess
 import com.library.data.models.books.BookUi
 import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
+import com.library.providers.api.handlers.convertToDataState
 import com.library.providers.api.sevices.data.LibraryRepository
 import com.library.providers.fileProvider.FileProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,8 +55,9 @@ class MainViewModel @Inject constructor(
                     if (barcodes.isNotEmpty()) {
                         barcodes.first().rawValue?.let { barcode ->
                             viewModelScope.launch {
-                                libraryRepository.getBookMetadata(barcode)
-                                Log.d("Barcode", barcode)
+                                val book = libraryRepository.getBookMetadata(barcode)
+                                book.convertToDataState()
+                                    .doIfSuccess { books.value = books.value.addToList(it) }
                             }
                         }
                     }

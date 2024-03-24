@@ -57,7 +57,7 @@ fun <T : BaseViewModel> Screen(
 
 private fun generateNavigationBarItems(): List<TabBarItem> = listOf(
     TabBarItem(
-        title = "Home",
+        title = "Books",
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home
     ),

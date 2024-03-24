@@ -1,5 +1,6 @@
 package com.library.providers.api.sevices.data
 
+import com.library.data.models.books.BookUi
 import com.library.providers.api.handlers.ApiHandler
 import com.library.providers.api.handlers.NetworkResult
 import com.library.providers.api.sevices.ApiServices
@@ -30,7 +31,7 @@ class LibraryRepositoryImpl @Inject constructor(
         handleApi { apiServices.getUserByLogin(login = login, password = password) }
 
 
-    override suspend fun getBookMetadata(isbn: String): NetworkResult<Any> =
+    override suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi> =
         handleApi { apiServices.getBookMetadata(isbn = isbn) }
 }
 
@@ -49,5 +50,5 @@ interface LibraryRepository {
         password: String
     ): NetworkResult<Any>
 
-    suspend fun getBookMetadata(isbn: String): NetworkResult<Any>
+    suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi>
 }
