@@ -22,13 +22,16 @@ class LibraryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUser(userId: String): NetworkResult<Any> {
-        return handleApi { apiServices.getUser(userId) }
-    }
+    override suspend fun getUser(userId: String): NetworkResult<Any> =
+        handleApi { apiServices.getUser(userId) }
 
-    override suspend fun getUserByLogin(login: String, password: String): NetworkResult<Any> {
-        return handleApi { apiServices.getUserByLogin(login = login, password = password) }
-    }
+
+    override suspend fun getUserByLogin(login: String, password: String): NetworkResult<Any> =
+        handleApi { apiServices.getUserByLogin(login = login, password = password) }
+
+
+    override suspend fun getBookMetadata(isbn: String): NetworkResult<Any> =
+        handleApi { apiServices.getBookMetadata(isbn = isbn) }
 }
 
 interface LibraryRepository {
@@ -45,4 +48,6 @@ interface LibraryRepository {
         login: String,
         password: String
     ): NetworkResult<Any>
+
+    suspend fun getBookMetadata(isbn: String): NetworkResult<Any>
 }

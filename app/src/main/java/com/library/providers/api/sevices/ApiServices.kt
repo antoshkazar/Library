@@ -20,4 +20,9 @@ interface ApiServices {
         @Query("login") login: String,
         @Query("password") password: String
     ): Response<Any>
+
+    @GET("/book_metadata")
+    suspend fun getBookMetadata(
+        @Query("isbn") isbn: String,
+    ): Response<Any>
 }
