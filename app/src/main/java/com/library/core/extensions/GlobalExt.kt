@@ -56,3 +56,9 @@ fun <T> List<T>.addToList(element: T): List<T> {
     mutableList.add(element)
     return mutableList
 }
+
+fun <T> List<T>.addAllToList(element: List<T>): List<T> {
+    val mutableList = this.toMutableList()
+    mutableList.addAll(element)
+    return mutableList
+}

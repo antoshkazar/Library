@@ -40,7 +40,7 @@ class AuthViewModel @Inject constructor(
                 login = login.value,
                 password = password.value
             ).convertToDataState().doIfSuccess {
-                authPreference.saveUserLogin(login = login.value)
+                authPreference.saveUserData(model = it)
                 navigateToRoute(MainRoute.route)
             }
         }
@@ -53,7 +53,7 @@ class AuthViewModel @Inject constructor(
                 login = registrationLogin.value,
                 password = registrationPassword.value
             ).convertToDataState().doIfSuccess {
-                authPreference.saveUserLogin(login = login.value)
+                authPreference.saveUserData(model = it)
                 navigateToRoute(MainRoute.route)
             }.doIfFailure {
                 Log.d("Failure:", it)

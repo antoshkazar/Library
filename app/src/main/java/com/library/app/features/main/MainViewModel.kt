@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.library.app.navigation.route.BookRoute
+import com.library.core.extensions.addAllToList
 import com.library.core.extensions.addToList
 import com.library.core.extensions.doIfSuccess
 import com.library.data.models.books.BookUi
@@ -13,6 +14,7 @@ import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
 import com.library.providers.api.handlers.convertToDataState
 import com.library.providers.api.sevices.data.LibraryRepository
+import com.library.providers.auth.AuthPreference
 import com.library.providers.fileProvider.FileProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +27,7 @@ class MainViewModel @Inject constructor(
     private val routeNavigator: RouteNavigator,
     private val libraryRepository: LibraryRepository,
     private val fileProvider: FileProvider,
+    private val authPreference: AuthPreference,
 ) : BaseViewModel(), RouteNavigator by routeNavigator {
     val books = mutableStateOf(
         listOf(
@@ -41,6 +44,11 @@ class MainViewModel @Inject constructor(
 
     private val capturedImageUri: MutableStateFlow<Uri> = MutableStateFlow(Uri.EMPTY)
 
+    fun onScreenLaunch() = viewModelScope.launch {
+        libraryRepository.getUserBooks(authPreference.identifier).convertToDataState()
+            .doIfSuccess { books.value = books.value.addAllToList(it) }
+    }
+
     fun onUriReceived(uri: Uri) = viewModelScope.launch {
         capturedImageUri.emit(uri)
         processImage(uri)
@@ -56,9 +64,11 @@ class MainViewModel @Inject constructor(
                     if (barcodes.isNotEmpty()) {
                         barcodes.first().rawValue?.let { barcode ->
                             viewModelScope.launch {
-                                val book = libraryRepository.getBookMetadata(barcode)
-                                book.convertToDataState()
-                                    .doIfSuccess { books.value = books.value.addToList(it) }
+                                libraryRepository.addBook(barcode, authPreference.rootGroupId)
+                                    .convertToDataState()
+                                    .doIfSuccess {
+                                        books.value = books.value.addToList(it.metadata)
+                                    }
                             }
                         }
                     }

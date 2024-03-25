@@ -77,6 +77,7 @@ fun MainScreen(
 
     Screen(
         viewModel = viewModel,
+        onScreenLaunch = viewModel::onScreenLaunch,
         scaffoldUI = ScaffoldUI(
             topBar = {
                 SearchBar(

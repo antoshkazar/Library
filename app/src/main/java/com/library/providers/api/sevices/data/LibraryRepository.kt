@@ -1,6 +1,8 @@
 package com.library.providers.api.sevices.data
 
+import com.library.data.models.books.AddBookResponseModel
 import com.library.data.models.books.BookUi
+import com.library.data.models.responses.LoginResponseModel
 import com.library.providers.api.handlers.ApiHandler
 import com.library.providers.api.handlers.NetworkResult
 import com.library.providers.api.sevices.ApiServices
@@ -13,7 +15,7 @@ class LibraryRepositoryImpl @Inject constructor(
         name: String,
         login: String,
         password: String
-    ): NetworkResult<Any> {
+    ): NetworkResult<LoginResponseModel> {
         return handleApi {
             apiServices.createClient(
                 name = name,
@@ -23,32 +25,45 @@ class LibraryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUser(userId: String): NetworkResult<Any> =
-        handleApi { apiServices.getUser(userId) }
 
-
-    override suspend fun getUserByLogin(login: String, password: String): NetworkResult<Any> =
+    override suspend fun getUserByLogin(
+        login: String,
+        password: String
+    ): NetworkResult<LoginResponseModel> =
         handleApi { apiServices.getUserByLogin(login = login, password = password) }
 
 
     override suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi> =
         handleApi { apiServices.getBookMetadata(isbn = isbn) }
+
+    override suspend fun getUserBooks(userId: String): NetworkResult<List<BookUi>> =
+        handleApi { apiServices.getUserBooks(userId = userId) }
+
+    override suspend fun addBook(
+        isbn: String,
+        groupId: String
+    ): NetworkResult<AddBookResponseModel> = handleApi {
+        apiServices.addBook(isbn, groupId)
+    }
+
 }
 
 interface LibraryRepository {
 
-    suspend fun getUser(userId: String): NetworkResult<Any>
-
     suspend fun getUserByLogin(
         login: String,
         password: String
-    ): NetworkResult<Any>
+    ): NetworkResult<LoginResponseModel>
 
     suspend fun createClient(
         name: String,
         login: String,
         password: String
-    ): NetworkResult<Any>
+    ): NetworkResult<LoginResponseModel>
 
     suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi>
+
+    suspend fun getUserBooks(userId: String): NetworkResult<List<BookUi>>
+
+    suspend fun addBook(isbn: String, groupId: String): NetworkResult<AddBookResponseModel>
 }
