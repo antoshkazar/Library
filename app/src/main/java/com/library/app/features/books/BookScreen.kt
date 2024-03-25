@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -177,7 +176,6 @@ private fun TextAndSubtextView(
 }
 
 @Composable
-@Preview(backgroundColor = 0xFFff9c33)
 private fun BookPropertiesContainer(
     modifier: Modifier = Modifier,
     textAndLabels: List<TextAndSubtextUi> = emptyList<TextAndSubtextUi>(),
@@ -192,22 +190,25 @@ private fun BookPropertiesContainer(
             .background(backgroundColor)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        textAndLabels.forEach {
-            if (it.text.isNotEmpty()) {
+        textAndLabels.forEachIndexed { index, item ->
+            if (item.text.isNotEmpty()) {
                 TextAndSubtextView(
-                    uiData = it,
+                    uiData = item,
                     backgroundColor = backgroundColor,
                     textColor = textColor,
                 )
-                Divider(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth(),
-                    thickness = 1.dp,
-                    color = Color.White
-                )
+                if(index != textAndLabels.lastIndex) {
+                    Divider(
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .fillMaxWidth(),
+                        thickness = 1.dp,
+                        color = Color.White
+                    )
+                }
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -216,29 +217,3 @@ private data class TextAndSubtextUi(
     val subtext: String = "ISBN",
     val iconResId: Int = R.drawable.ic_open_book,
 )
-
-@Composable
-@Preview(backgroundColor = 0xFFff9c33)
-private fun LabelAssignmentView(
-    modifier: Modifier = Modifier,
-    label: String = "Category",
-    text: String = "Drama",
-    backgroundColor: Color = Color.White,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clip(RoundedCornerShape(8.dp))
-    ) {
-        Text(
-            modifier = Modifier
-                .wrapContentHeight()
-                .padding(start = 8.dp)
-                .align(Alignment.CenterVertically),
-            text = label,
-        )
-        Spacer(modifier = Modifier.width(24.dp))
-        //TextAndSubtextView(text = text, backgroundColor = backgroundColor)
-    }
-}
