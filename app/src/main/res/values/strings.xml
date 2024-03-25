@@ -9,4 +9,7 @@
     <string name="register">Register</string>
     <string name="category">Category</string>
     <string name="publication_year">Publication year</string>
+    <string name="your_book">%s\'s Book</string>
+    <string name="main_info">Book information</string>
+    <string name="additional_information">Additional information</string>
 </resources>
