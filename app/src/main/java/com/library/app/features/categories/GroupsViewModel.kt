@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.library.app.navigation.route.BookRoute
 import com.library.app.navigation.route.GroupRoute
 import com.library.app.navigation.route.GroupRoute.KEY_GROUP
 import com.library.app.navigation.route.MainRoute
@@ -49,8 +50,15 @@ class GroupsViewModel @Inject constructor(
         }
         currentGroup.value.subgroupsIds.forEach { subgroup ->
             libraryRepository.getGroup(subgroup.toString()).convertToDataState().doIfSuccess {
-                //todo
-                subgroups.value = subgroups.value.addToList(it)
+                if (!subgroups.value.contains(it))
+                    subgroups.value = subgroups.value.addToList(it)
+            }
+        }
+
+        currentGroup.value.booksIds.forEach { subgroup ->
+            libraryRepository.getBook(subgroup.toString()).convertToDataState().doIfSuccess {
+                if (!subBooks.value.contains(it.metadata))
+                    subBooks.value = subBooks.value.addToList(it.metadata)
             }
         }
     }
@@ -60,12 +68,16 @@ class GroupsViewModel @Inject constructor(
     }
 
     override fun navigateToBooks() {
-        navigateToRoute(MainRoute.route)
+        popToRoute(MainRoute.route)
     }
 
     fun removeItem(group: Group) {
         val mutableList = subgroups.value.toMutableList()
         mutableList.remove(group)
         subgroups.value = mutableList
+    }
+
+    fun onBookClick(bookUi: BookUi) {
+        navigateToRoute(BookRoute.routeWithParams(bookUi = bookUi))
     }
 }

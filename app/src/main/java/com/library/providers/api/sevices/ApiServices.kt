@@ -1,6 +1,6 @@
 package com.library.providers.api.sevices
 
-import com.library.data.models.books.AddBookResponseModel
+import com.library.data.models.books.BookResponseModel
 import com.library.data.models.books.BookUi
 import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
@@ -30,13 +30,13 @@ interface ApiServices {
     @GET("/get_user_books")
     suspend fun getUserBooks(
         @Query("user_id") userId: String,
-    ): Response<List<AddBookResponseModel>>
+    ): Response<List<BookResponseModel>>
 
     @GET("/add_book")
     suspend fun addBook(
         @Query("isbn") isbn: String,
         @Query("group_id") groupId: String,
-    ): Response<AddBookResponseModel>
+    ): Response<BookResponseModel>
 
     @GET("/add_group")
     suspend fun addGroup(
@@ -48,4 +48,10 @@ interface ApiServices {
     suspend fun getGroup(
         @Query("group_id") groupId: String,
     ): Response<Group>
+
+    @GET("/get_book")
+    suspend fun getBook(
+        @Query("book_id") bookId: String,
+    ): Response<BookResponseModel>
+
 }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.library.data.models.screen.Screens
 import com.library.presentation.BaseViewModel
 
 data class ScaffoldUI(
@@ -34,6 +35,7 @@ fun <T : BaseViewModel> Screen(
     viewModel: T,
     scaffoldUI: ScaffoldUI = ScaffoldUI(),
     onScreenLaunch: () -> Unit = {},
+    screenType: Screens = Screens.BOOKS,
 ) {
     LaunchedEffect(Unit) {
         onScreenLaunch()
@@ -43,6 +45,7 @@ fun <T : BaseViewModel> Screen(
     val tabBarItems = listOf(
         TabBarItem(
             title = "Books",
+            onIconClick = viewModel::navigateToBooks,
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home
         ),
@@ -55,22 +58,20 @@ fun <T : BaseViewModel> Screen(
 
         TabBarItem(
             title = "Settings",
-            onIconClick = viewModel::navigateToBooks,
             selectedIcon = Icons.Filled.Settings,
             unselectedIcon = Icons.Outlined.Settings
         ),
-        //    TabBarItem(
-//        title = "Alerts",
-//        selectedIcon = Icons.Filled.Notifications,
-//        unselectedIcon = Icons.Outlined.Notifications,
-//        badgeAmount = 7
-//    ),
     )
 
     ScaffoldWithNetwork(
         modifier = scaffoldUI.modifier,
         topBar = scaffoldUI.topBar,
-        bottomBar = { if (scaffoldUI.isNeedToShowNavigationBar) TabView(tabBarItems) },
+        bottomBar = {
+            if (scaffoldUI.isNeedToShowNavigationBar) TabView(
+                tabBarItems,
+                selectedIndex = screenType.ordinal
+            )
+        },
         loaderWidgetUI = loaderUI,
         containerColor = scaffoldUI.containerColor
     ) {

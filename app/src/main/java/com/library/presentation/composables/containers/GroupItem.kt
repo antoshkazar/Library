@@ -20,6 +20,7 @@ import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
@@ -41,6 +42,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.library.R
 import com.library.data.models.groups.Group
+import com.library.presentation.theme.Brown30
+import com.library.presentation.theme.Brown60
+import com.library.presentation.theme.Brown80
+import com.library.presentation.theme.Brown90
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +53,7 @@ import kotlinx.coroutines.delay
 @Preview
 fun GroupItem(
     group: Group = Group(identifier = "99", name = "Group 1"),
-    onRemove: (Group) -> Unit = {}
+    onRemove: (Group) -> Unit = {},
 ) {
     val context = LocalContext.current
     var show by remember { mutableStateOf(true) }
@@ -72,7 +77,8 @@ fun GroupItem(
             },
             dismissContent = {
                 GroupCard(group)
-            }
+            },
+            directions = setOf(DismissDirection.EndToStart)
         )
     }
 
@@ -88,7 +94,13 @@ fun GroupItem(
 @Composable
 private fun GroupCard(group: Group) {
     ListItem(
-        modifier = Modifier.clip(MaterialTheme.shapes.small),
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.small)
+            .background(Brown60),
+        colors = ListItemDefaults.colors(
+            containerColor = Brown80,
+            leadingIconColor = Brown30,
+        ),
         headlineContent = {
             Text(
                 group.name,
@@ -107,7 +119,7 @@ private fun GroupCard(group: Group) {
                 contentDescription = "person icon",
                 Modifier
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(Brown90)
                     .padding(10.dp)
             )
         }

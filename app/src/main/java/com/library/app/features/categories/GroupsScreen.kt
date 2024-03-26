@@ -1,7 +1,11 @@
 package com.library.app.features.categories
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,8 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.library.R
+import com.library.data.models.screen.Screens
 import com.library.presentation.composables.TopBar
 import com.library.presentation.composables.TopBarUI
+import com.library.presentation.composables.books.BookView
 import com.library.presentation.composables.containers.GroupItem
 import com.library.presentation.composables.containers.ScaffoldUI
 import com.library.presentation.composables.containers.Screen
@@ -38,9 +44,13 @@ fun GroupsScreen(
     val subgroups by remember {
         viewModel.subgroups
     }
+    val subBooks by remember {
+        viewModel.subBooks
+    }
     Screen(
         viewModel = viewModel,
         onScreenLaunch = viewModel::onScreenLaunch,
+        screenType = Screens.GROUP,
         scaffoldUI = ScaffoldUI(
             isNeedToShowNavigationBar = true,
             topBar = {
@@ -55,50 +65,52 @@ fun GroupsScreen(
             content = {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     item {
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = stringResource(id = R.string.subgroups),
-                            style = LibraryTypography.titleSmall,
-                            modifier = Modifier
-                                .align(Alignment.Start)
-                                .padding(start = 24.dp)
-                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Box(modifier = Modifier.fillMaxWidth())
+                        {
+                            Text(
+                                text = stringResource(id = R.string.subgroups),
+                                style = LibraryTypography.titleSmall,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(start = 24.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .wrapContentHeight(),
+                                .wrapContentHeight()
+                                .padding(horizontal = 16.dp),
                         ) {
-//                    itemsIndexed(
-//                        items = subgroups,
-//                        // Provide a unique key based on the email content
-//                        key = { _, item -> item.hashCode() }
-//                    ) { _, groupContent ->
-                            // Display each email item
                             subgroups.forEach { groupContent ->
                                 GroupItem(groupContent, onRemove = viewModel::removeItem)
+                                Spacer(modifier = Modifier.height(8.dp))
                             }
                         }
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = stringResource(id = R.string.group_books),
-                            style = LibraryTypography.titleSmall,
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = stringResource(id = R.string.group_books),
+                                style = LibraryTypography.titleSmall,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(start = 24.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        FlowRow(
                             modifier = Modifier
-                                .align(Alignment.Start)
-                                .padding(start = 24.dp)
-                        )
-//
-//                        LazyColumn(
-//                            modifier = Modifier.fillMaxSize(),
-//                        ) {
-//                            itemsIndexed(
-//                                items = subgroups,
-//                                // Provide a unique key based on the email content
-//                                key = { _, item -> item.hashCode() }
-//                            ) { _, groupContent ->
-//                                // Display each email item
-//                                GroupItem(groupContent, onRemove = viewModel::removeItem)
-//                            }
-//                        }
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            subBooks.forEach { bookUi ->
+                                BookView(
+                                    bookUi = bookUi,
+                                    modifier = Modifier.clickable { viewModel.onBookClick(bookUi) })
+                            }
+                        }
                     }
                 }
             }

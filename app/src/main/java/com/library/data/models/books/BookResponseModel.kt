@@ -2,7 +2,7 @@ package com.library.data.models.books
 
 import com.google.gson.annotations.SerializedName
 
-data class AddBookResponseModel(
+data class BookResponseModel(
     @SerializedName("identifier")
     val identifier: String = "",
     @SerializedName("metadata")

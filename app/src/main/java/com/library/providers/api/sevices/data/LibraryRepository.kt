@@ -1,13 +1,12 @@
 package com.library.providers.api.sevices.data
 
-import com.library.data.models.books.AddBookResponseModel
+import com.library.data.models.books.BookResponseModel
 import com.library.data.models.books.BookUi
 import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
 import com.library.providers.api.handlers.ApiHandler
 import com.library.providers.api.handlers.NetworkResult
 import com.library.providers.api.sevices.ApiServices
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class LibraryRepositoryImpl @Inject constructor(
@@ -38,18 +37,22 @@ class LibraryRepositoryImpl @Inject constructor(
     override suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi> =
         handleApi { apiServices.getBookMetadata(isbn = isbn) }
 
-    override suspend fun getUserBooks(userId: String): NetworkResult<List<AddBookResponseModel>> =
+    override suspend fun getUserBooks(userId: String): NetworkResult<List<BookResponseModel>> =
         handleApi { apiServices.getUserBooks(userId = userId) }
 
     override suspend fun addBook(
         isbn: String,
         groupId: String
-    ): NetworkResult<AddBookResponseModel> = handleApi {
+    ): NetworkResult<BookResponseModel> = handleApi {
         apiServices.addBook(isbn, groupId)
     }
 
     override suspend fun getGroup(groupId: String): NetworkResult<Group> = handleApi {
         apiServices.getGroup(groupId)
+    }
+
+    override suspend fun getBook(bookId: String): NetworkResult<BookResponseModel> = handleApi {
+        apiServices.getBook(bookId = bookId)
     }
 
 }
@@ -69,11 +72,15 @@ interface LibraryRepository {
 
     suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi>
 
-    suspend fun getUserBooks(userId: String): NetworkResult<List<AddBookResponseModel>>
+    suspend fun getUserBooks(userId: String): NetworkResult<List<BookResponseModel>>
 
-    suspend fun addBook(isbn: String, groupId: String): NetworkResult<AddBookResponseModel>
+    suspend fun addBook(isbn: String, groupId: String): NetworkResult<BookResponseModel>
 
     suspend fun getGroup(
-        @Query("group_id") groupId: String,
+        groupId: String,
     ): NetworkResult<Group>
+
+    suspend fun getBook(
+        bookId: String,
+    ): NetworkResult<BookResponseModel>
 }

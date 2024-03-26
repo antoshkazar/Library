@@ -9,10 +9,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -26,21 +22,19 @@ data class TabBarItem(
 
 
 @Composable
-fun TabView(tabBarItems: List<TabBarItem>) {
-    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+fun TabView(tabBarItems: List<TabBarItem>, selectedIndex: Int) {
 
     NavigationBar {
 
         tabBarItems.forEachIndexed { index, tabBarItem ->
             NavigationBarItem(
-                selected = selectedTabIndex == index,
+                selected = selectedIndex == index,
                 onClick = {
-                    selectedTabIndex = index
                     tabBarItem.onIconClick()
                 },
                 icon = {
                     TabBarIconView(
-                        isSelected = selectedTabIndex == index,
+                        isSelected = selectedIndex == index,
                         badgeAmount = tabBarItem.badgeAmount,
                         tabBarItem = tabBarItem,
                     )

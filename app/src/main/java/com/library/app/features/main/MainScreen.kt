@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.library.BuildConfig
 import com.library.core.extensions.createImageFile
+import com.library.data.models.screen.Screens
 import com.library.presentation.composables.books.AddBookView
 import com.library.presentation.composables.books.BookView
 import com.library.presentation.composables.containers.ScaffoldUI
@@ -96,6 +97,7 @@ fun MainScreen(
     Screen(
         viewModel = viewModel,
         onScreenLaunch = viewModel::onScreenLaunch,
+        screenType = Screens.BOOKS,
         scaffoldUI = ScaffoldUI(
             topBar = {
                 SearchBar(

@@ -53,8 +53,7 @@ fun BookScreen(
         viewModel = viewModel,
         onScreenLaunch = viewModel::onScreenLaunch,
         scaffoldUI = ScaffoldUI(
-            isNeedToShowNavigationBar = true,
-
+            isNeedToShowNavigationBar = false,
             topBar = {
                 TopBar(
                     uiData = TopBarUI(
