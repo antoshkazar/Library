@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -42,7 +40,32 @@ fun <T : BaseViewModel> Screen(
     }
 
     val loaderUI by remember { viewModel.progressState }
-    val tabBarItems = generateNavigationBarItems()
+    val tabBarItems = listOf(
+        TabBarItem(
+            title = "Books",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home
+        ),
+        TabBarItem(
+            title = "Categories",
+            onIconClick = viewModel::navigateToCategories,
+            selectedIcon = Icons.Filled.List,
+            unselectedIcon = Icons.Outlined.List
+        ),
+
+        TabBarItem(
+            title = "Settings",
+            onIconClick = viewModel::navigateToBooks,
+            selectedIcon = Icons.Filled.Settings,
+            unselectedIcon = Icons.Outlined.Settings
+        ),
+        //    TabBarItem(
+//        title = "Alerts",
+//        selectedIcon = Icons.Filled.Notifications,
+//        unselectedIcon = Icons.Outlined.Notifications,
+//        badgeAmount = 7
+//    ),
+    )
 
     ScaffoldWithNetwork(
         modifier = scaffoldUI.modifier,
@@ -54,27 +77,3 @@ fun <T : BaseViewModel> Screen(
         scaffoldUI.content(this)
     }
 }
-
-private fun generateNavigationBarItems(): List<TabBarItem> = listOf(
-    TabBarItem(
-        title = "Books",
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home
-    ),
-    TabBarItem(
-        title = "Alerts",
-        selectedIcon = Icons.Filled.Notifications,
-        unselectedIcon = Icons.Outlined.Notifications,
-        badgeAmount = 7
-    ),
-    TabBarItem(
-        title = "Settings",
-        selectedIcon = Icons.Filled.Settings,
-        unselectedIcon = Icons.Outlined.Settings
-    ),
-    TabBarItem(
-        title = "More",
-        selectedIcon = Icons.Filled.List,
-        unselectedIcon = Icons.Outlined.List
-    )
-)

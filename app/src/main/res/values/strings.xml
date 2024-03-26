@@ -12,4 +12,6 @@
     <string name="your_book">%s\'s Book</string>
     <string name="main_info">Book information</string>
     <string name="additional_information">Additional information</string>
+    <string name="subgroups">Subgroups</string>
+    <string name="group_books">Books of the group</string>
 </resources>

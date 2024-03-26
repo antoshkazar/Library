@@ -6,4 +6,8 @@ import com.library.presentation.composables.LoaderWidgetState
 
 abstract class BaseViewModel : ViewModel() {
     val progressState = mutableStateOf(LoaderWidgetState(isLoading = false))
+
+    open fun navigateToCategories() {}
+
+    open fun navigateToBooks() {}
 }

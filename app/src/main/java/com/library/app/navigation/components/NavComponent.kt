@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.library.app.navigation.route.AuthRoute
 import com.library.app.navigation.route.BookRoute
+import com.library.app.navigation.route.GroupRoute
 import com.library.app.navigation.route.MainRoute
 
 @Composable
@@ -26,5 +27,6 @@ fun NavigationComponent(
         AuthRoute.composable(this, navHostController, windowSize)
         MainRoute.composable(this, navHostController, windowSize)
         BookRoute.composable(this, navHostController, windowSize)
+        GroupRoute.composable(this, navHostController, windowSize)
     }
 }

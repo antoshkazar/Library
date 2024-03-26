@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.library.app.navigation.route.BookRoute
+import com.library.app.navigation.route.GroupRoute
 import com.library.core.extensions.addAllToList
 import com.library.core.extensions.addToList
 import com.library.core.extensions.doIfSuccess
@@ -43,6 +44,10 @@ class MainViewModel @Inject constructor(
             .doIfSuccess {
                 books.value = books.value.addAllToList(it.map { model -> model.metadata })
             }
+    }
+
+    override fun navigateToCategories() {
+        navigateToRoute(GroupRoute.routeWithParams("1"))//authPreference.rootGroupId)) //todo
     }
 
     fun onUriReceived(uri: Uri) = viewModelScope.launch {

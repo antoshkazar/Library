@@ -2,6 +2,7 @@ package com.library.providers.api.sevices
 
 import com.library.data.models.books.AddBookResponseModel
 import com.library.data.models.books.BookUi
+import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
 import retrofit2.Response
 import retrofit2.http.GET
@@ -36,4 +37,15 @@ interface ApiServices {
         @Query("isbn") isbn: String,
         @Query("group_id") groupId: String,
     ): Response<AddBookResponseModel>
+
+    @GET("/add_group")
+    suspend fun addGroup(
+        @Query("name") name: String,
+        @Query("parent_group_id") parentGroupId: String,
+    ): Response<Group>
+
+    @GET("/get_group")
+    suspend fun getGroup(
+        @Query("group_id") groupId: String,
+    ): Response<Group>
 }

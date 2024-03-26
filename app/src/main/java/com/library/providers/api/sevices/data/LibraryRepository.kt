@@ -2,10 +2,12 @@ package com.library.providers.api.sevices.data
 
 import com.library.data.models.books.AddBookResponseModel
 import com.library.data.models.books.BookUi
+import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
 import com.library.providers.api.handlers.ApiHandler
 import com.library.providers.api.handlers.NetworkResult
 import com.library.providers.api.sevices.ApiServices
+import retrofit2.http.Query
 import javax.inject.Inject
 
 class LibraryRepositoryImpl @Inject constructor(
@@ -46,6 +48,10 @@ class LibraryRepositoryImpl @Inject constructor(
         apiServices.addBook(isbn, groupId)
     }
 
+    override suspend fun getGroup(groupId: String): NetworkResult<Group> = handleApi {
+        apiServices.getGroup(groupId)
+    }
+
 }
 
 interface LibraryRepository {
@@ -66,4 +72,8 @@ interface LibraryRepository {
     suspend fun getUserBooks(userId: String): NetworkResult<List<AddBookResponseModel>>
 
     suspend fun addBook(isbn: String, groupId: String): NetworkResult<AddBookResponseModel>
+
+    suspend fun getGroup(
+        @Query("group_id") groupId: String,
+    ): NetworkResult<Group>
 }
