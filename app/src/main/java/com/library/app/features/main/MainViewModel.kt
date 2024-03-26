@@ -30,13 +30,7 @@ class MainViewModel @Inject constructor(
     private val authPreference: AuthPreference,
 ) : BaseViewModel(), RouteNavigator by routeNavigator {
     val books = mutableStateOf(
-        listOf(
-            BookUi(title = "3 Мушкетера"),
-            BookUi(title = "Война и мир"),
-            BookUi(title = "Анна Каренина"),
-            BookUi(title = "Бесы"),
-            BookUi(title = "Мартышка и очки")
-        )
+        emptyList<BookUi>()
     )
     val searchText = mutableStateOf("")
     val isSearching = mutableStateOf(false)
@@ -46,7 +40,9 @@ class MainViewModel @Inject constructor(
 
     fun onScreenLaunch() = viewModelScope.launch {
         libraryRepository.getUserBooks(authPreference.identifier).convertToDataState()
-            .doIfSuccess { books.value = books.value.addAllToList(it) }
+            .doIfSuccess {
+                books.value = books.value.addAllToList(it.map { model -> model.metadata })
+            }
     }
 
     fun onUriReceived(uri: Uri) = viewModelScope.launch {

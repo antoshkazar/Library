@@ -29,7 +29,7 @@ interface ApiServices {
     @GET("/get_user_books")
     suspend fun getUserBooks(
         @Query("user_id") userId: String,
-    ): Response<List<BookUi>>
+    ): Response<List<AddBookResponseModel>>
 
     @GET("/add_book")
     suspend fun addBook(

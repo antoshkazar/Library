@@ -36,7 +36,7 @@ class LibraryRepositoryImpl @Inject constructor(
     override suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi> =
         handleApi { apiServices.getBookMetadata(isbn = isbn) }
 
-    override suspend fun getUserBooks(userId: String): NetworkResult<List<BookUi>> =
+    override suspend fun getUserBooks(userId: String): NetworkResult<List<AddBookResponseModel>> =
         handleApi { apiServices.getUserBooks(userId = userId) }
 
     override suspend fun addBook(
@@ -63,7 +63,7 @@ interface LibraryRepository {
 
     suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi>
 
-    suspend fun getUserBooks(userId: String): NetworkResult<List<BookUi>>
+    suspend fun getUserBooks(userId: String): NetworkResult<List<AddBookResponseModel>>
 
     suspend fun addBook(isbn: String, groupId: String): NetworkResult<AddBookResponseModel>
 }
