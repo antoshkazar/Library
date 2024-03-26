@@ -36,4 +36,8 @@ class BookViewModel @Inject constructor(
     fun onScreenLaunch() {
         username.value = authPreference.name
     }
+
+    fun onClickBackButton() {
+        navigateUp()
+    }
 }

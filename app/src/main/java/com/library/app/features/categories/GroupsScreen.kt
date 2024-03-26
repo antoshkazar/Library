@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.library.app.features.main.MAX_ITEMS_IN_ROW
 import com.library.presentation.composables.books.AddBookView
 import com.library.presentation.composables.containers.ScaffoldUI
 import com.library.presentation.composables.containers.Screen
@@ -38,7 +37,7 @@ fun GroupsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .padding(horizontal = 16.dp), maxItemsInEachRow = MAX_ITEMS_IN_ROW,
+                                .padding(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.Center
                         ) {
                             AddBookView(

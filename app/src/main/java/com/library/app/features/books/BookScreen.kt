@@ -30,10 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.library.R
+import com.library.presentation.composables.TopBar
+import com.library.presentation.composables.TopBarUI
 import com.library.presentation.composables.containers.ScaffoldUI
 import com.library.presentation.composables.containers.Screen
 import com.library.presentation.theme.Brown60
-import com.library.presentation.theme.Brown80
 import com.library.presentation.theme.LibraryTypography
 
 @Composable
@@ -53,27 +54,24 @@ fun BookScreen(
         onScreenLaunch = viewModel::onScreenLaunch,
         scaffoldUI = ScaffoldUI(
             isNeedToShowNavigationBar = true,
+
+            topBar = {
+                TopBar(
+                    uiData = TopBarUI(
+                        title = currentBookUi.title,
+                        hasBackButton = true,
+                    ),
+                    windowSizeClass = windowSizeClass,
+                    onClickBackButton = viewModel::onClickBackButton,
+                )
+            },
             content = {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Brown80)
                 ) {
                     item {
-                        Text(
-                            text = currentBookUi.title,
-                            style = LibraryTypography.titleLarge,
-                            modifier = Modifier
-                                .align(Alignment.Start)
-                                .padding(start = 24.dp, top = 16.dp)
-                        )
-
-                        Divider(
-                            modifier = Modifier.padding(vertical = 24.dp),
-                            thickness = 2.dp,
-                            color = Color.White
-                        )
-
+                        Spacer(modifier = Modifier.height(24.dp))
                         Text(
                             text = stringResource(id = R.string.main_info),
                             style = LibraryTypography.titleSmall,
@@ -197,7 +195,7 @@ private fun BookPropertiesContainer(
                     backgroundColor = backgroundColor,
                     textColor = textColor,
                 )
-                if(index != textAndLabels.lastIndex) {
+                if (index != textAndLabels.lastIndex) {
                     Divider(
                         modifier = Modifier
                             .padding(vertical = 8.dp)
