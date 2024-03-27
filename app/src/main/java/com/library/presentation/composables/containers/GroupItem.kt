@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,7 +45,6 @@ import com.library.R
 import com.library.data.models.groups.Group
 import com.library.presentation.theme.Brown30
 import com.library.presentation.theme.Brown60
-import com.library.presentation.theme.Brown80
 import com.library.presentation.theme.Brown90
 import kotlinx.coroutines.delay
 
@@ -52,8 +52,9 @@ import kotlinx.coroutines.delay
 @Composable
 @Preview
 fun GroupItem(
-    group: Group = Group(identifier = "99", name = "Group 1"),
+    group: Group = Group(groupIdentifier = "99", name = "Group 1"),
     onRemove: (Group) -> Unit = {},
+    onGroupClick: (Group) -> Unit = {}
 ) {
     val context = LocalContext.current
     var show by remember { mutableStateOf(true) }
@@ -71,7 +72,7 @@ fun GroupItem(
     ) {
         SwipeToDismiss(
             state = dismissState,
-            modifier = Modifier,
+            modifier = Modifier.clickable { onGroupClick(group) },
             background = {
                 DismissBackground(dismissState)
             },
@@ -98,7 +99,7 @@ private fun GroupCard(group: Group) {
             .clip(MaterialTheme.shapes.small)
             .background(Brown60),
         colors = ListItemDefaults.colors(
-            containerColor = Brown80,
+            containerColor = Brown60,
             leadingIconColor = Brown30,
         ),
         headlineContent = {
@@ -109,7 +110,7 @@ private fun GroupCard(group: Group) {
         },
         supportingContent = {
             Text(
-                group.identifier,
+                group.groupIdentifier,
                 style = MaterialTheme.typography.bodySmall
             )
         },
@@ -130,8 +131,7 @@ private fun GroupCard(group: Group) {
 @Composable
 private fun DismissBackground(dismissState: DismissState) {
     val color = when (dismissState.dismissDirection) {
-        DismissDirection.StartToEnd -> Color(0xFFFF1744)
-        DismissDirection.EndToStart -> Color(0xFF1DE9B6)
+        DismissDirection.StartToEnd, DismissDirection.EndToStart -> Color(0xFFFF1744)
         null -> Color.Transparent
     }
     val direction = dismissState.dismissDirection

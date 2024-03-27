@@ -30,12 +30,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.library.BuildConfig
+import com.library.R
 import com.library.core.extensions.createImageFile
 import com.library.data.models.screen.Screens
+import com.library.presentation.composables.EmptyView
+import com.library.presentation.composables.EmptyViewUI
 import com.library.presentation.composables.books.AddBookView
 import com.library.presentation.composables.books.BookView
 import com.library.presentation.composables.containers.ScaffoldUI
@@ -137,25 +141,38 @@ fun MainScreen(
             isNeedToShowNavigationBar = true,
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    LazyColumn {
-                        item {
-                            FlowRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight(),
-                                // maxItemsInEachRow = MAX_ITEMS_IN_ROW,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                books.forEach { bookUi ->
-                                    BookView(
-                                        bookUi = bookUi,
-                                        modifier = Modifier.clickable { viewModel.onBookClick(bookUi) })
+                    if (books.isNotEmpty()) {
+                        LazyColumn {
+                            item {
+                                FlowRow(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    // maxItemsInEachRow = MAX_ITEMS_IN_ROW,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    books.forEach { bookUi ->
+                                        BookView(
+                                            bookUi = bookUi,
+                                            modifier = Modifier.clickable {
+                                                viewModel.onBookClick(
+                                                    bookUi
+                                                )
+                                            })
+                                    }
+                                    AddBookView(
+                                        onAddBookClick = onAddBookClick
+                                    )
                                 }
-                                AddBookView(
-                                    onAddBookClick = onAddBookClick
-                                )
                             }
                         }
+                    } else {
+                        EmptyView(
+                            uiData = EmptyViewUI(
+                                text = stringResource(id = R.string.nothing_found),
+                            ),
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
                     FloatingActionButton(
                         modifier = Modifier

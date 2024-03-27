@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.library.app.navigation.route.BookRoute
 import com.library.app.navigation.route.GroupRoute
-import com.library.core.extensions.addAllToList
 import com.library.core.extensions.addToList
 import com.library.core.extensions.doIfSuccess
+import com.library.core.extensions.replaceAllInList
 import com.library.data.models.books.BookUi
 import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
@@ -40,14 +40,18 @@ class MainViewModel @Inject constructor(
     private val capturedImageUri: MutableStateFlow<Uri> = MutableStateFlow(Uri.EMPTY)
 
     fun onScreenLaunch() = viewModelScope.launch {
+        getUserBooks()
+    }
+
+    private suspend fun getUserBooks() {
         libraryRepository.getUserBooks(authPreference.identifier).convertToDataState()
             .doIfSuccess {
-                books.value = books.value.addAllToList(it.map { model -> model.metadata })
+                books.value = books.value.replaceAllInList(it.map { model -> model.metadata })
             }
     }
 
     override fun navigateToCategories() {
-        navigateToRoute(GroupRoute.routeWithParams("1"))//authPreference.rootGroupId)) //todo
+        navigateToRoute(GroupRoute.routeWithParams(authPreference.rootGroupId)) //todo
     }
 
     fun onUriReceived(uri: Uri) = viewModelScope.launch {

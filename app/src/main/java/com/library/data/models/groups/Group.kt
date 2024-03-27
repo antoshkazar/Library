@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Group(
     @SerializedName("identifier")
-    val identifier: String = "",
+    val groupIdentifier: String = "",
     @SerializedName("name")
     val name: String = "",
     @SerializedName("subgroups_ids")

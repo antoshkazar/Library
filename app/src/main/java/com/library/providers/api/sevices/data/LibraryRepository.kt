@@ -47,7 +47,6 @@ class LibraryRepositoryImpl @Inject constructor(
         apiServices.addBook(isbn, groupId)
     }
 
-
     override suspend fun getGroup(groupId: String): NetworkResult<Group> = handleApi {
         apiServices.getGroup(groupId)
     }

@@ -14,6 +14,7 @@
     <string name="additional_information">Additional information</string>
     <string name="subgroups">Subgroups</string>
     <string name="group_books">Books of the group</string>
-    <string name="group_name">Group name</string>
+    <string name="subgroup_name">Subgroup name</string>
     <string name="create">Create</string>
+    <string name="nothing_found">Nothing to see here yet!</string>
 </resources>

@@ -13,8 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -31,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.library.R
 import com.library.data.models.screen.Screens
+import com.library.presentation.composables.EmptyView
+import com.library.presentation.composables.EmptyViewUI
 import com.library.presentation.composables.TopBar
 import com.library.presentation.composables.TopBarUI
 import com.library.presentation.composables.books.BookView
@@ -65,6 +71,9 @@ fun GroupsScreen(
     val scope = rememberCoroutineScope()
     var showRegistrationBottomSheet by remember { mutableStateOf(false) }
 
+    val isBackButtonVisible by remember {
+        viewModel.isBackButtonVisible
+    }
     Screen(
         viewModel = viewModel,
         onScreenLaunch = viewModel::onScreenLaunch,
@@ -75,60 +84,98 @@ fun GroupsScreen(
                 TopBar(
                     uiData = TopBarUI(
                         title = currentGroup.name,
-                        hasBackButton = false,
+                        hasBackButton = isBackButtonVisible,
                     ),
                     windowSizeClass = windowSizeClass,
+                    onClickBackButton = viewModel::onBackButtonClick
                 )
             },
             content = {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Box(modifier = Modifier.fillMaxWidth())
-                        {
-                            Text(
-                                text = stringResource(id = R.string.subgroups),
-                                style = LibraryTypography.titleSmall,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .padding(start = 24.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .padding(horizontal = 16.dp),
-                        ) {
-                            subgroups.forEach { groupContent ->
-                                GroupItem(groupContent, onRemove = viewModel::removeItem)
-                                Spacer(modifier = Modifier.height(8.dp))
+                Box {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        item {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Box(modifier = Modifier.fillMaxWidth())
+                            {
+                                Text(
+                                    text = stringResource(id = R.string.subgroups),
+                                    style = LibraryTypography.titleSmall,
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            if (subgroups.isNotEmpty()) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                        .padding(horizontal = 16.dp),
+                                ) {
+                                    subgroups.forEach { groupContent ->
+                                        GroupItem(
+                                            groupContent,
+                                            onRemove = viewModel::onDeleteItemClick,
+                                            onGroupClick = viewModel::onGroupClick
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                    }
+                                }
+                            } else {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                EmptyView(
+                                    uiData = EmptyViewUI(
+                                        text = stringResource(id = R.string.nothing_found),
+                                        hasTopSpacer = false
+                                    ),
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = stringResource(id = R.string.group_books),
+                                    style = LibraryTypography.titleSmall,
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            if (subBooks.isNotEmpty()) {
+                                FlowRow(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    subBooks.forEach { bookUi ->
+                                        BookView(
+                                            bookUi = bookUi,
+                                            modifier = Modifier.clickable {
+                                                viewModel.onBookClick(
+                                                    bookUi
+                                                )
+                                            })
+                                    }
+                                }
+                            } else {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                EmptyView(
+                                    uiData = EmptyViewUI(
+                                        text = stringResource(id = R.string.nothing_found),
+                                        hasTopSpacer = false
+                                    ),
+                                )
                             }
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = stringResource(id = R.string.group_books),
-                                style = LibraryTypography.titleSmall,
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .padding(start = 24.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        FlowRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            subBooks.forEach { bookUi ->
-                                BookView(
-                                    bookUi = bookUi,
-                                    modifier = Modifier.clickable { viewModel.onBookClick(bookUi) })
-                            }
-                        }
+                    }
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 16.dp, bottom = 16.dp),
+                        onClick = { showRegistrationBottomSheet = true },
+                    ) {
+                        Icon(Icons.Filled.Add, "Floating action button.")
                     }
                 }
 
@@ -145,7 +192,7 @@ fun GroupsScreen(
                             modifier = Modifier.padding(horizontal = 24.dp),
                             uiData = InputTextFieldUI(
                                 text = newGroupName,
-                                label = stringResource(id = R.string.name)
+                                label = stringResource(id = R.string.subgroup_name)
                             ),
                             onValueChange = viewModel::onGroupNameChange,
                         )

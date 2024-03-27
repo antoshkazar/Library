@@ -11,8 +11,10 @@ import com.library.app.navigation.route.GroupRoute
 import com.library.app.navigation.route.GroupRoute.KEY_GROUP
 import com.library.app.navigation.route.MainRoute
 import com.library.core.extensions.addToList
+import com.library.core.extensions.containsBook
 import com.library.core.extensions.doIfFailure
 import com.library.core.extensions.doIfSuccess
+import com.library.core.extensions.doIfSuccessSuspend
 import com.library.core.extensions.fromJson
 import com.library.data.models.books.BookUi
 import com.library.data.models.groups.Group
@@ -38,29 +40,45 @@ class GroupsViewModel @Inject constructor(
     val subgroups: MutableState<List<Group>> = mutableStateOf(emptyList())
     val subBooks: MutableState<List<BookUi>> = mutableStateOf(emptyList())
     val newGroupName = mutableStateOf("")
+    val isBackButtonVisible = mutableStateOf(false)
 
     init {
         savedStateHandle.get<String>(KEY_GROUP)
             ?.let {
                 val routeParam = Uri.decode(it).fromJson(GroupRoute.Param::class.java)
-                currentGroup.value = Group(identifier = routeParam.groupId)
+                currentGroup.value = Group(groupIdentifier = routeParam.groupId)
             }
     }
 
-    fun onScreenLaunch() = viewModelScope.launch {
-        libraryRepository.getGroup(currentGroup.value.identifier).convertToDataState().doIfSuccess {
-            currentGroup.value = it
+    fun onScreenLaunch() {
+        isBackButtonVisible.value = currentGroup.value.groupIdentifier != authPreference.rootGroupId
+        viewModelScope.launch {
+            getGroup()
+            getSubgroups()
+            getSubBooks()
         }
+    }
+
+    private suspend fun getGroup() {
+        libraryRepository.getGroup(currentGroup.value.groupIdentifier).convertToDataState()
+            .doIfSuccess {
+                currentGroup.value = it
+            }
+    }
+
+    private suspend fun getSubgroups() {
         currentGroup.value.subgroupsIds.forEach { subgroup ->
             libraryRepository.getGroup(subgroup.toString()).convertToDataState().doIfSuccess {
-                if (!subgroups.value.contains(it))
+                if (!subgroups.value.containsGroup(it))
                     subgroups.value = subgroups.value.addToList(it)
             }
         }
+    }
 
+    private suspend fun getSubBooks() {
         currentGroup.value.booksIds.forEach { subgroup ->
             libraryRepository.getBook(subgroup.toString()).convertToDataState().doIfSuccess {
-                if (!subBooks.value.contains(it.metadata))
+                if (!subBooks.value.containsBook(it.metadata))
                     subBooks.value = subBooks.value.addToList(it.metadata)
             }
         }
@@ -71,17 +89,32 @@ class GroupsViewModel @Inject constructor(
     }
 
     override fun navigateToCategories() {
-        navigateToRoute(GroupRoute.routeWithParams(currentGroup.value.identifier))
+        navigateToRoute(GroupRoute.routeWithParams(currentGroup.value.groupIdentifier))
+    }
+
+    fun onBackButtonClick() {
+        navigateUp()
     }
 
     override fun navigateToBooks() {
         popToRoute(MainRoute.route)
     }
 
-    fun removeItem(group: Group) {
-        val mutableList = subgroups.value.toMutableList()
-        mutableList.remove(group)
-        subgroups.value = mutableList
+    fun onDeleteItemClick(group: Group) = viewModelScope.launch {
+        libraryRepository.deleteGroup(
+            groupId = group.groupIdentifier,
+            parentGroupId = currentGroup.value.groupIdentifier
+        ).convertToDataState().doIfSuccess {
+            if(it.toBooleanStrictOrNull() == true) {
+                val mutableList = subgroups.value.toMutableList()
+                mutableList.remove(group)
+                subgroups.value = mutableList
+            }
+        }
+    }
+
+    fun onGroupClick(group: Group) {
+        navigateToRoute(GroupRoute.routeWithParams(group.groupIdentifier))
     }
 
     fun onBookClick(bookUi: BookUi) {
@@ -92,11 +125,16 @@ class GroupsViewModel @Inject constructor(
         viewModelScope.launch {
             libraryRepository.addGroup(
                 name = newGroupName.value,
-                parentGroupId = currentGroup.value.identifier,
-            ).convertToDataState()
-                .doIfFailure {
-                    Log.d("Failure:", it)
-                }
+                parentGroupId = currentGroup.value.groupIdentifier,
+            ).convertToDataState().doIfSuccessSuspend {
+                getGroup()
+                getSubgroups()
+            }.doIfFailure {
+                Log.d("Failure:", it)
+            }
         }
     }
+
+    private fun List<Group>.containsGroup(group: Group): Boolean =
+        this.any { it.groupIdentifier == group.groupIdentifier }
 }

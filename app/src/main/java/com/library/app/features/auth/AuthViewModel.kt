@@ -36,10 +36,11 @@ class AuthViewModel @Inject constructor(
 
     fun onLoginClick() {
         viewModelScope.launch {
-            libraryRepository.getUserByLogin(
+            val res = libraryRepository.getUserByLogin(
                 login = login.value,
                 password = password.value
-            ).convertToDataState().doIfSuccess {
+            )
+            res.convertToDataState().doIfSuccess {
                 authPreference.saveUserData(model = it)
                 navigateToRoute(MainRoute.route)
             }

@@ -4,6 +4,8 @@ import android.util.Log
 import retrofit2.HttpException
 import retrofit2.Response
 
+const val ERROR = "Error"
+
 interface ApiHandler {
     suspend fun <T : Any> handleApi(
         execute: suspend () -> Response<T>
@@ -12,12 +14,16 @@ interface ApiHandler {
             val response = execute()
             val body = response.body()
             Log.d("response: ", response.toString())
-            if (response.isSuccessful && body != null) {
+            if (response.isSuccessful && body != null
+            ) {
                 NetworkResult.Success(response.code(), body)
             } else {
                 NetworkResult.Error(
                     code = response.code(),
                     errorMsg = response.errorBody().toString()
+                        .ifEmpty {
+                            response.body().toString()
+                        }
                 )
             }
         } catch (e: HttpException) {

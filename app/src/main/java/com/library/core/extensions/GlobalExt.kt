@@ -3,6 +3,7 @@ package com.library.core.extensions
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.library.data.models.books.BookUi
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -62,3 +63,17 @@ fun <T> List<T>.addAllToList(element: List<T>): List<T> {
     mutableList.addAll(element)
     return mutableList
 }
+
+fun <T> List<T>.replaceAllInList(element: List<T>): List<T> {
+    val mutableList = this.toMutableList()
+    element.forEach { newItem ->
+        if (!mutableList.contains(newItem)) {
+            mutableList.add(newItem)
+        }
+    }
+
+    return mutableList
+}
+
+fun List<BookUi>.containsBook(bookUi: BookUi): Boolean =
+    this.any { it.isbn == bookUi.isbn }
