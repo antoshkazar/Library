@@ -67,17 +67,17 @@ class GroupsViewModel @Inject constructor(
     }
 
     private suspend fun getSubgroups() {
+        subgroups.value = emptyList()
         currentGroup.value.subgroupsIds.forEach { subgroup ->
             libraryRepository.getGroup(subgroup.toString()).convertToDataState().doIfSuccess {
-                if (!subgroups.value.containsGroup(it))
-                    subgroups.value = subgroups.value.addToList(it)
+                subgroups.value = subgroups.value.addToList(it)
             }
         }
     }
 
     private suspend fun getSubBooks() {
-        currentGroup.value.booksIds.forEach { subgroup ->
-            libraryRepository.getBook(subgroup.toString()).convertToDataState().doIfSuccess {
+        currentGroup.value.booksIds.forEach { book ->
+            libraryRepository.getBook(book.toString()).convertToDataState().doIfSuccess {
                 if (!subBooks.value.containsBook(it.metadata))
                     subBooks.value = subBooks.value.addToList(it.metadata)
             }
@@ -105,7 +105,7 @@ class GroupsViewModel @Inject constructor(
             groupId = group.groupIdentifier,
             parentGroupId = currentGroup.value.groupIdentifier
         ).convertToDataState().doIfSuccess {
-            if(it.toBooleanStrictOrNull() == true) {
+            if (it.toBooleanStrictOrNull() == true) {
                 val mutableList = subgroups.value.toMutableList()
                 mutableList.remove(group)
                 subgroups.value = mutableList

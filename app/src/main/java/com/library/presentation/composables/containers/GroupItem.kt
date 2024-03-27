@@ -61,7 +61,9 @@ fun GroupItem(
     val currentItem by rememberUpdatedState(group)
     val dismissState = rememberDismissState(
         confirmValueChange = {
-            if (it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd) {
+            if ((it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd)
+                && group.booksIds.isEmpty() && group.subgroupsIds.isEmpty()
+            ) {
                 show = false
                 true
             } else false
