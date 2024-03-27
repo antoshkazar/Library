@@ -10,7 +10,7 @@ import com.library.app.navigation.route.GroupRoute
 import com.library.core.extensions.addToList
 import com.library.core.extensions.doIfSuccess
 import com.library.core.extensions.replaceAllInList
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookModel
 import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
 import com.library.providers.api.handlers.convertToDataState
@@ -31,7 +31,7 @@ class MainViewModel @Inject constructor(
     private val authPreference: AuthPreference,
 ) : BaseViewModel(), RouteNavigator by routeNavigator {
     val books = mutableStateOf(
-        emptyList<BookUi>()
+        emptyList<BookModel>()
     )
     val searchText = mutableStateOf("")
     val isSearching = mutableStateOf(false)
@@ -46,7 +46,7 @@ class MainViewModel @Inject constructor(
     private suspend fun getUserBooks() {
         libraryRepository.getUserBooks(authPreference.identifier).convertToDataState()
             .doIfSuccess {
-                books.value = books.value.replaceAllInList(it.map { model -> model.metadata })
+                books.value = books.value.replaceAllInList(it)
             }
     }
 
@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
                                 libraryRepository.addBook(barcode, authPreference.rootGroupId)
                                     .convertToDataState()
                                     .doIfSuccess {
-                                        books.value = books.value.addToList(it.metadata)
+                                        books.value = books.value.addToList(it)
                                     }
                             }
                         }
@@ -97,7 +97,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onBookClick(bookUi: BookUi) {
+    fun onBookClick(bookUi: BookModel) {
         navigateToRoute(BookRoute.routeWithParams(bookUi = bookUi))
     }
 }

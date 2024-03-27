@@ -3,7 +3,7 @@ package com.library.core.extensions
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookMetadata
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -75,5 +75,5 @@ fun <T> List<T>.replaceAllInList(element: List<T>): List<T> {
     return mutableList
 }
 
-fun List<BookUi>.containsBook(bookUi: BookUi): Boolean =
+fun List<BookMetadata>.containsBook(bookUi: BookMetadata): Boolean =
     this.any { it.isbn == bookUi.isbn }

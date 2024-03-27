@@ -1,7 +1,7 @@
 package com.library.providers.api.sevices
 
-import com.library.data.models.books.BookResponseModel
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookModel
+import com.library.data.models.books.BookMetadata
 import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
 import retrofit2.Response
@@ -25,18 +25,18 @@ interface ApiServices {
     @GET("/book_metadata")
     suspend fun getBookMetadata(
         @Query("isbn") isbn: String,
-    ): Response<BookUi>
+    ): Response<BookMetadata>
 
     @GET("/get_user_books")
     suspend fun getUserBooks(
         @Query("user_id") userId: String,
-    ): Response<List<BookResponseModel>>
+    ): Response<List<BookModel>>
 
     @GET("/add_book")
     suspend fun addBook(
         @Query("isbn") isbn: String,
         @Query("group_id") groupId: String,
-    ): Response<BookResponseModel>
+    ): Response<BookModel>
 
     @GET("/add_group")
     suspend fun addGroup(
@@ -52,12 +52,24 @@ interface ApiServices {
     @GET("/get_book")
     suspend fun getBook(
         @Query("book_id") bookId: String,
-    ): Response<BookResponseModel>
+    ): Response<BookModel>
 
     @GET("/delete_group")
     suspend fun deleteGroup(
         @Query("group_id") groupId: String,
         @Query("parent_group_id") parentGroupId: String,
+    ): Response<String>
+
+    @GET("/get_user_groups")
+    suspend fun getUserGroups(
+        @Query("user_id") userId: String,
+    ): Response<List<Group>>
+
+    @GET("/move_book")
+    suspend fun moveBook(
+        @Query("book_id") bookId: String,
+        @Query("current_group_id") currentGroupId: String,
+        @Query("target_group_id") targetGroupId: String,
     ): Response<String>
 
 }

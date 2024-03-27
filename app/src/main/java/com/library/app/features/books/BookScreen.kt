@@ -1,7 +1,10 @@
 package com.library.app.features.books
 
+import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,33 +13,51 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import com.library.R
 import com.library.presentation.composables.TopBar
 import com.library.presentation.composables.TopBarUI
 import com.library.presentation.composables.containers.ScaffoldUI
 import com.library.presentation.composables.containers.Screen
+import com.library.presentation.theme.Brown30
 import com.library.presentation.theme.Brown60
 import com.library.presentation.theme.LibraryTypography
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookScreen(
     viewModel: BookViewModel,
@@ -49,6 +70,25 @@ fun BookScreen(
         viewModel.username
     }
 
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    val allGroups by remember {
+        viewModel.allGroups
+    }
+
+    var selectedText by remember { viewModel.selectedText }
+
+    var textfieldSize by remember { mutableStateOf(Size.Zero) }
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp //it requires androidx.compose.material:material-icons-extended
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    val context = LocalContext.current
+
     Screen(
         viewModel = viewModel,
         onScreenLaunch = viewModel::onScreenLaunch,
@@ -57,7 +97,7 @@ fun BookScreen(
             topBar = {
                 TopBar(
                     uiData = TopBarUI(
-                        title = currentBookUi.title,
+                        title = currentBookUi.metadata.title,
                         hasBackButton = true,
                     ),
                     windowSizeClass = windowSizeClass,
@@ -71,6 +111,55 @@ fun BookScreen(
                 ) {
                     item {
                         Spacer(modifier = Modifier.height(24.dp))
+                        Box(
+                            modifier = Modifier
+                                .wrapContentHeight()
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            OutlinedTextField(
+                                readOnly = true,
+                                value = selectedText,
+                                onValueChange = { },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .onGloballyPositioned { coordinates ->
+                                        textfieldSize = coordinates.size.toSize()
+                                    }
+                                    .padding(horizontal = 24.dp),
+                                label = { Text("Book group") },
+                                trailingIcon = {
+                                    Icon(icon, "contentDescription",
+                                        Modifier.clickable { expanded = !expanded })
+                                },
+                                colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = Brown30)
+                            )
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                modifier = Modifier
+                                    .width(
+                                        with(LocalDensity.current, { textfieldSize.width.toDp() })
+                                    )
+                                    .padding(horizontal = 24.dp)
+                            ) {
+                                allGroups.forEach { group ->
+                                    DropdownMenuItem(text = {
+                                        Text(text = group.name)
+                                    }, onClick = {
+                                        expanded = false
+                                        selectedText = group.name
+                                        viewModel.moveBook(group)
+                                        Toast.makeText(
+                                            context,
+                                            "Group changed!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    })
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(24.dp))
                         Text(
                             text = stringResource(id = R.string.main_info),
                             style = LibraryTypography.titleSmall,
@@ -83,15 +172,15 @@ fun BookScreen(
                             backgroundColor = Brown60,
                             textAndLabels = listOf(
                                 TextAndSubtextUi(
-                                    text = currentBookUi.authors,
+                                    text = currentBookUi.metadata.authors,
                                     subtext = "Authors",
                                 ),
                                 TextAndSubtextUi(
-                                    text = currentBookUi.publisher,
+                                    text = currentBookUi.metadata.publisher,
                                     subtext = "publisher",
                                 ),
                                 TextAndSubtextUi(
-                                    text = currentBookUi.isbn,
+                                    text = currentBookUi.metadata.isbn,
                                     subtext = "ISBN",
                                 ),
                             )
@@ -109,15 +198,17 @@ fun BookScreen(
                             backgroundColor = Brown60,
                             textAndLabels = listOf(
                                 TextAndSubtextUi(
-                                    text = currentBookUi.language,
+                                    text = currentBookUi.metadata.language,
                                     subtext = "language",
                                 ),
                                 TextAndSubtextUi(
-                                    text = currentBookUi.year,
+                                    text = currentBookUi.metadata.year,
                                     subtext = "year",
                                 ),
                             )
                         )
+
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
             }

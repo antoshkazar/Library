@@ -1,7 +1,7 @@
 package com.library.providers.api.sevices.data
 
-import com.library.data.models.books.BookResponseModel
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookModel
+import com.library.data.models.books.BookMetadata
 import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
 import com.library.providers.api.handlers.ApiHandler
@@ -34,16 +34,16 @@ class LibraryRepositoryImpl @Inject constructor(
         handleApi { apiServices.getUserByLogin(login = login, password = password) }
 
 
-    override suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi> =
+    override suspend fun getBookMetadata(isbn: String): NetworkResult<BookMetadata> =
         handleApi { apiServices.getBookMetadata(isbn = isbn) }
 
-    override suspend fun getUserBooks(userId: String): NetworkResult<List<BookResponseModel>> =
+    override suspend fun getUserBooks(userId: String): NetworkResult<List<BookModel>> =
         handleApi { apiServices.getUserBooks(userId = userId) }
 
     override suspend fun addBook(
         isbn: String,
         groupId: String
-    ): NetworkResult<BookResponseModel> = handleApi {
+    ): NetworkResult<BookModel> = handleApi {
         apiServices.addBook(isbn, groupId)
     }
 
@@ -51,7 +51,7 @@ class LibraryRepositoryImpl @Inject constructor(
         apiServices.getGroup(groupId)
     }
 
-    override suspend fun getBook(bookId: String): NetworkResult<BookResponseModel> = handleApi {
+    override suspend fun getBook(bookId: String): NetworkResult<BookModel> = handleApi {
         apiServices.getBook(bookId = bookId)
     }
 
@@ -70,6 +70,17 @@ class LibraryRepositoryImpl @Inject constructor(
             apiServices.deleteGroup(groupId, parentGroupId)
         }
 
+    override suspend fun getUserGroups(userId: String): NetworkResult<List<Group>> = handleApi {
+        apiServices.getUserGroups(userId)
+    }
+
+    override suspend fun moveBook(
+        bookId: String,
+        currentGroupId: String,
+        targetGroupId: String
+    ): NetworkResult<String> = handleApi {
+        apiServices.moveBook(bookId,currentGroupId, targetGroupId)
+    }
 }
 
 interface LibraryRepository {
@@ -85,11 +96,11 @@ interface LibraryRepository {
         password: String
     ): NetworkResult<LoginResponseModel>
 
-    suspend fun getBookMetadata(isbn: String): NetworkResult<BookUi>
+    suspend fun getBookMetadata(isbn: String): NetworkResult<BookMetadata>
 
-    suspend fun getUserBooks(userId: String): NetworkResult<List<BookResponseModel>>
+    suspend fun getUserBooks(userId: String): NetworkResult<List<BookModel>>
 
-    suspend fun addBook(isbn: String, groupId: String): NetworkResult<BookResponseModel>
+    suspend fun addBook(isbn: String, groupId: String): NetworkResult<BookModel>
 
     suspend fun getGroup(
         groupId: String,
@@ -97,7 +108,7 @@ interface LibraryRepository {
 
     suspend fun getBook(
         bookId: String,
-    ): NetworkResult<BookResponseModel>
+    ): NetworkResult<BookModel>
 
     suspend fun addGroup(
         name: String,
@@ -107,5 +118,15 @@ interface LibraryRepository {
     suspend fun deleteGroup(
         groupId: String,
         parentGroupId: String,
+    ): NetworkResult<String>
+
+    suspend fun getUserGroups(
+        userId: String,
+    ): NetworkResult<List<Group>>
+
+    suspend fun moveBook(
+        bookId: String,
+        currentGroupId: String,
+        targetGroupId: String,
     ): NetworkResult<String>
 }

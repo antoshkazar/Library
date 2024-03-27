@@ -11,12 +11,11 @@ import com.library.app.navigation.route.GroupRoute
 import com.library.app.navigation.route.GroupRoute.KEY_GROUP
 import com.library.app.navigation.route.MainRoute
 import com.library.core.extensions.addToList
-import com.library.core.extensions.containsBook
 import com.library.core.extensions.doIfFailure
 import com.library.core.extensions.doIfSuccess
 import com.library.core.extensions.doIfSuccessSuspend
 import com.library.core.extensions.fromJson
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookModel
 import com.library.data.models.groups.Group
 import com.library.presentation.BaseViewModel
 import com.library.presentation.navigation.route.RouteNavigator
@@ -38,7 +37,7 @@ class GroupsViewModel @Inject constructor(
 ) : BaseViewModel(), RouteNavigator by routeNavigator {
     val currentGroup: MutableState<Group> = mutableStateOf(Group())
     val subgroups: MutableState<List<Group>> = mutableStateOf(emptyList())
-    val subBooks: MutableState<List<BookUi>> = mutableStateOf(emptyList())
+    val subBooks: MutableState<List<BookModel>> = mutableStateOf(emptyList())
     val newGroupName = mutableStateOf("")
     val isBackButtonVisible = mutableStateOf(false)
 
@@ -77,9 +76,9 @@ class GroupsViewModel @Inject constructor(
 
     private suspend fun getSubBooks() {
         currentGroup.value.booksIds.forEach { book ->
-            libraryRepository.getBook(book.toString()).convertToDataState().doIfSuccess {
-                if (!subBooks.value.containsBook(it.metadata))
-                    subBooks.value = subBooks.value.addToList(it.metadata)
+            libraryRepository.getBook(book.toString()).convertToDataState().doIfSuccess { newBook ->
+                if (!subBooks.value.any { book -> book.metadata.isbn == newBook.metadata.isbn })
+                    subBooks.value = subBooks.value.addToList(newBook)
             }
         }
     }
@@ -117,7 +116,7 @@ class GroupsViewModel @Inject constructor(
         navigateToRoute(GroupRoute.routeWithParams(group.groupIdentifier))
     }
 
-    fun onBookClick(bookUi: BookUi) {
+    fun onBookClick(bookUi: BookModel) {
         navigateToRoute(BookRoute.routeWithParams(bookUi = bookUi))
     }
 

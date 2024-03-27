@@ -10,7 +10,7 @@ import androidx.navigation.navArgument
 import com.library.app.features.books.BookScreen
 import com.library.app.features.books.BookViewModel
 import com.library.core.extensions.toJson
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookModel
 import com.library.presentation.navigation.route.NavRoute
 
 object BookRoute : NavRoute<BookViewModel> {
@@ -19,7 +19,7 @@ object BookRoute : NavRoute<BookViewModel> {
     override val route = "book_screen/{$KEY_BOOK}"
 
     fun routeWithParams(
-        bookUi: BookUi,
+        bookUi: BookModel,
     ): String {
         val uri = Uri.encode(
             Param(
@@ -30,7 +30,7 @@ object BookRoute : NavRoute<BookViewModel> {
     }
 
     data class Param(
-        val bookUi: BookUi,
+        val bookUi: BookModel,
     )
 
     override fun getArguments(): List<NamedNavArgument> = listOf(

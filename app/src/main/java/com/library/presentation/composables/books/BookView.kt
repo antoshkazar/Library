@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.library.data.models.books.BookUi
+import com.library.data.models.books.BookMetadata
 import com.library.presentation.theme.Brown20
 import com.library.presentation.theme.Brown30
 import com.library.presentation.theme.Brown40
@@ -28,7 +28,7 @@ const val BOOK_VIEW_SIZE = 150
 @Composable
 fun BookView(
     modifier: Modifier = Modifier,
-    bookUi: BookUi = BookUi(
+    bookUi: BookMetadata = BookMetadata(
         title = "Мастер и Маргарита",
     ),
 ) {

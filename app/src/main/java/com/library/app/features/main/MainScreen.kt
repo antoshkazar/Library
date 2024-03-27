@@ -153,7 +153,7 @@ fun MainScreen(
                                 ) {
                                     books.forEach { bookUi ->
                                         BookView(
-                                            bookUi = bookUi,
+                                            bookUi = bookUi.metadata,
                                             modifier = Modifier.clickable {
                                                 viewModel.onBookClick(
                                                     bookUi
