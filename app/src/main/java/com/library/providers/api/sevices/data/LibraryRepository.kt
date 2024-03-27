@@ -47,6 +47,7 @@ class LibraryRepositoryImpl @Inject constructor(
         apiServices.addBook(isbn, groupId)
     }
 
+
     override suspend fun getGroup(groupId: String): NetworkResult<Group> = handleApi {
         apiServices.getGroup(groupId)
     }
@@ -54,6 +55,21 @@ class LibraryRepositoryImpl @Inject constructor(
     override suspend fun getBook(bookId: String): NetworkResult<BookResponseModel> = handleApi {
         apiServices.getBook(bookId = bookId)
     }
+
+    override suspend fun addGroup(
+        name: String,
+        parentGroupId: String,
+    ): NetworkResult<Group> = handleApi {
+        apiServices.addGroup(name, parentGroupId)
+    }
+
+    override suspend fun deleteGroup(
+        groupId: String,
+        parentGroupId: String
+    ): NetworkResult<String> =
+        handleApi {
+            apiServices.deleteGroup(groupId, parentGroupId)
+        }
 
 }
 
@@ -83,4 +99,14 @@ interface LibraryRepository {
     suspend fun getBook(
         bookId: String,
     ): NetworkResult<BookResponseModel>
+
+    suspend fun addGroup(
+        name: String,
+        parentGroupId: String,
+    ): NetworkResult<Group>
+
+    suspend fun deleteGroup(
+        groupId: String,
+        parentGroupId: String,
+    ): NetworkResult<String>
 }

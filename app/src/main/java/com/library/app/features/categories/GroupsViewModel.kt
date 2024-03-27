@@ -1,6 +1,7 @@
 package com.library.app.features.categories
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -10,6 +11,7 @@ import com.library.app.navigation.route.GroupRoute
 import com.library.app.navigation.route.GroupRoute.KEY_GROUP
 import com.library.app.navigation.route.MainRoute
 import com.library.core.extensions.addToList
+import com.library.core.extensions.doIfFailure
 import com.library.core.extensions.doIfSuccess
 import com.library.core.extensions.fromJson
 import com.library.data.models.books.BookUi
@@ -35,6 +37,7 @@ class GroupsViewModel @Inject constructor(
     val currentGroup: MutableState<Group> = mutableStateOf(Group())
     val subgroups: MutableState<List<Group>> = mutableStateOf(emptyList())
     val subBooks: MutableState<List<BookUi>> = mutableStateOf(emptyList())
+    val newGroupName = mutableStateOf("")
 
     init {
         savedStateHandle.get<String>(KEY_GROUP)
@@ -63,6 +66,10 @@ class GroupsViewModel @Inject constructor(
         }
     }
 
+    fun onGroupNameChange(value: String) {
+        newGroupName.value = value
+    }
+
     override fun navigateToCategories() {
         navigateToRoute(GroupRoute.routeWithParams(currentGroup.value.identifier))
     }
@@ -79,5 +86,17 @@ class GroupsViewModel @Inject constructor(
 
     fun onBookClick(bookUi: BookUi) {
         navigateToRoute(BookRoute.routeWithParams(bookUi = bookUi))
+    }
+
+    fun onCreateGroupClick() {
+        viewModelScope.launch {
+            libraryRepository.addGroup(
+                name = newGroupName.value,
+                parentGroupId = currentGroup.value.identifier,
+            ).convertToDataState()
+                .doIfFailure {
+                    Log.d("Failure:", it)
+                }
+        }
     }
 }

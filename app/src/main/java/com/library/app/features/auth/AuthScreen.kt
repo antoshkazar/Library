@@ -87,7 +87,8 @@ fun AuthScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp),
                         onClick = viewModel::onLoginClick,
-                        shape = ButtonDefaults.filledTonalShape
+                        shape = ButtonDefaults.filledTonalShape,
+                        enabled = login.isNotEmpty() && password.isNotEmpty()
                     ) {
                         Text(text = stringResource(id = R.string.enter))
                     }
@@ -137,6 +138,7 @@ fun AuthScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 24.dp),
+                                enabled = registrationLogin.isNotEmpty() && registrationPassword.isNotEmpty() && registrationName.isNotEmpty(),
                                 onClick = {
                                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                                         if (!sheetState.isVisible) {

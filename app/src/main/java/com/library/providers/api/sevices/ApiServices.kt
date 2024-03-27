@@ -54,4 +54,10 @@ interface ApiServices {
         @Query("book_id") bookId: String,
     ): Response<BookResponseModel>
 
+    @GET("/delete_group")
+    suspend fun deleteGroup(
+        @Query("group_id") groupId: String,
+        @Query("parent_group_id") parentGroupId: String,
+    ): Response<String>
+
 }
