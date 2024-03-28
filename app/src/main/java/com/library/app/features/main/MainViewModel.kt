@@ -73,6 +73,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun getUserBooks() {
+        books.value = emptyList()
         libraryRepository.getUserBooks(authPreference.identifier).convertToDataState()
             .doIfSuccess {
                 books.value = books.value.replaceAllInList(it)

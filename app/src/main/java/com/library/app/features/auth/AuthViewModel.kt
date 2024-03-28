@@ -31,7 +31,6 @@ class AuthViewModel @Inject constructor(
 
     fun onScreenLaunch() {
         login.value = authPreference.login
-        password.value = "11" //TODO
     }
 
     fun onLoginClick() {
