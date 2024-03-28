@@ -1,7 +1,7 @@
 package com.library.providers.api.sevices
 
-import com.library.data.models.books.BookModel
 import com.library.data.models.books.BookMetadata
+import com.library.data.models.books.BookModel
 import com.library.data.models.groups.Group
 import com.library.data.models.responses.LoginResponseModel
 import retrofit2.Response
@@ -71,5 +71,19 @@ interface ApiServices {
         @Query("current_group_id") currentGroupId: String,
         @Query("target_group_id") targetGroupId: String,
     ): Response<String>
+
+    @GET("/change_book")
+    suspend fun changeBook(
+        @Query("book_id") bookId: String,
+        @Query("comment") comment: String,
+        @Query("color") color: String,
+        @Query("place") place: String,
+    ): Response<BookModel>
+
+    @GET("/delete_book")
+    suspend fun deleteBook(
+        @Query("book_id") bookId: String,
+        @Query("group_id") groupId: String,
+    ): Response<BookModel>
 
 }

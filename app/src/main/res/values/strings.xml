@@ -21,4 +21,8 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="book_not_found">The book with following ISBN is not found in your library. Would you like to add it?</string>
+    <string name="description">Description</string>
+    <string name="color">Color</string>
+    <string name="save">Save</string>
+    <string name="delete_book">Delete book</string>
 </resources>

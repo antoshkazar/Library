@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.library.data.models.books.BookMetadata
+import com.library.data.models.books.BookModel
 import com.library.presentation.theme.Brown20
 import com.library.presentation.theme.Brown30
 import com.library.presentation.theme.Brown40
@@ -28,9 +29,12 @@ const val BOOK_VIEW_SIZE = 150
 @Composable
 fun BookView(
     modifier: Modifier = Modifier,
-    bookUi: BookMetadata = BookMetadata(
-        title = "Мастер и Маргарита",
+    bookUi: BookModel = BookModel(
+        metadata = BookMetadata(
+            title = "Мастер и Маргарита",
+        )
     ),
+    onDeleteClick: (BookModel) -> Unit = {}
 ) {
     val brightColors = mutableListOf(Brown60, Brown80)
     val allColors = mutableListOf(Brown30, Brown20, Brown40, Brown60, Brown80)
@@ -52,7 +56,7 @@ fun BookView(
                 .wrapContentSize()
                 .padding(horizontal = 4.dp)
                 .align(Alignment.Center),
-            text = bookUi.title,
+            text = bookUi.metadata.title,
             color = if (randomColor in brightColors) {
                 Color.Black
             } else {

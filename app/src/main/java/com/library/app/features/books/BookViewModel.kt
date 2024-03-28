@@ -33,6 +33,8 @@ class BookViewModel @Inject constructor(
     val isCategoryExpanded = mutableStateOf(false)
     val allGroups = mutableStateOf(emptyList<Group>())
     val selectedText = mutableStateOf("")
+    val descriptionText = mutableStateOf("")
+    val colorText = mutableStateOf("")
     val currentGroup: MutableState<Group?> = mutableStateOf(null)
 
     init {
@@ -40,6 +42,8 @@ class BookViewModel @Inject constructor(
             ?.let {
                 val routeParam = Uri.decode(it).fromJson(BookRoute.Param::class.java)
                 currentBookUi.value = routeParam.bookUi
+                descriptionText.value = routeParam.bookUi.comment
+                colorText.value = routeParam.bookUi.color
             }
     }
 
@@ -68,5 +72,36 @@ class BookViewModel @Inject constructor(
 
     fun onClickBackButton() {
         navigateUp()
+    }
+
+    fun onDescriptionChange(newValue: String) {
+        descriptionText.value = newValue
+    }
+
+    fun onColorChange(newValue: String) {
+        colorText.value = newValue
+    }
+
+    fun onSaveCLick() {
+        viewModelScope.launch {
+            val res = libraryRepository.changeBook(
+                bookId = currentBookUi.value.identifier,
+                comment = descriptionText.value,
+                color = colorText.value,
+            )
+            res.convertToDataState().doIfSuccess {
+                currentBookUi.value = it
+            }
+        }
+    }
+
+    fun onDeleteClick() = viewModelScope.launch {
+        libraryRepository.deleteBook(
+            bookId = currentBookUi.value.identifier,
+            groupId = currentGroup.value?.groupIdentifier ?: authPreference.rootGroupId
+        )
+            .convertToDataState().doIfSuccess {
+                navigateUp()
+            }
     }
 }

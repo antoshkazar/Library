@@ -21,11 +21,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -53,6 +56,8 @@ import com.library.presentation.composables.TopBar
 import com.library.presentation.composables.TopBarUI
 import com.library.presentation.composables.containers.ScaffoldUI
 import com.library.presentation.composables.containers.Screen
+import com.library.presentation.composables.input.InputTextField
+import com.library.presentation.composables.input.InputTextFieldUI
 import com.library.presentation.theme.Brown30
 import com.library.presentation.theme.Brown60
 import com.library.presentation.theme.LibraryTypography
@@ -79,6 +84,10 @@ fun BookScreen(
     }
 
     var selectedText by remember { viewModel.selectedText }
+
+    var descriptionText by remember { viewModel.descriptionText }
+
+    var colorText by remember { viewModel.colorText }
 
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -209,6 +218,62 @@ fun BookScreen(
                         )
 
                         Spacer(modifier = Modifier.height(24.dp))
+
+                        InputTextField(
+                            modifier = Modifier.padding(horizontal = 24.dp),
+                            uiData = InputTextFieldUI(
+                                text = descriptionText,
+                                label = stringResource(id = R.string.description)
+                            ),
+                            onValueChange = viewModel::onDescriptionChange,
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        InputTextField(
+                            modifier = Modifier.padding(horizontal = 24.dp),
+                            uiData = InputTextFieldUI(
+                                text = colorText,
+                                label = stringResource(id = R.string.color)
+                            ),
+                            onValueChange = viewModel::onColorChange,
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp),
+                            onClick = {
+                                viewModel.onSaveCLick()
+                                Toast.makeText(
+                                    context,
+                                    "Properties saved!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            shape = ButtonDefaults.filledTonalShape,
+                            enabled = descriptionText.isNotEmpty() || colorText.isNotEmpty()
+                        ) {
+                            Text(text = stringResource(id = R.string.save))
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedButton(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp),
+                            onClick = {
+                                viewModel.onDeleteClick()
+                            },
+                            shape = ButtonDefaults.filledTonalShape,
+                            enabled = true,
+                        ) {
+                            Text(text = stringResource(id = R.string.delete_book))
+                        }
                     }
                 }
             }

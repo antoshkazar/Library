@@ -50,7 +50,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onQrReceived(barcode: String) {
-        if (!books.value.any { it.metadata.isbn == "barcode" }) {
+        if (!books.value.any { it.metadata.isbn == barcode }) {
             showQuestionDialog.value = true
         } else {
             books.value.firstOrNull { it.metadata.isbn == barcode }?.let {

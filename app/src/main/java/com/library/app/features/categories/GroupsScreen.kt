@@ -150,7 +150,7 @@ fun GroupsScreen(
                                 ) {
                                     subBooks.forEach { bookUi ->
                                         BookView(
-                                            bookUi = bookUi.metadata,
+                                            bookUi = bookUi,
                                             modifier = Modifier.clickable {
                                                 viewModel.onBookClick(
                                                     bookUi

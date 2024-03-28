@@ -93,6 +93,20 @@ class LibraryRepositoryImpl @Inject constructor(
     override suspend fun updateScannedQr(code: String) {
         scannedQr.value = code
     }
+
+    override suspend fun changeBook(
+        bookId: String,
+        comment: String,
+        color: String,
+        place: String
+    ): NetworkResult<BookModel> = handleApi {
+        apiServices.changeBook(bookId, comment, color, place)
+    }
+
+    override suspend fun deleteBook(bookId: String, groupId: String): NetworkResult<BookModel> =
+        handleApi {
+            apiServices.deleteBook(bookId, groupId)
+        }
 }
 
 interface LibraryRepository {
@@ -141,6 +155,19 @@ interface LibraryRepository {
         currentGroupId: String,
         targetGroupId: String,
     ): NetworkResult<String>
+
+    suspend fun changeBook(
+        bookId: String,
+        comment: String,
+        color: String,
+        place: String = "",
+    ): NetworkResult<BookModel>
+
+
+    suspend fun deleteBook(
+        bookId: String,
+        groupId: String,
+    ): NetworkResult<BookModel>
 
     fun getScannedQr(): String
 
