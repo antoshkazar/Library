@@ -41,11 +41,35 @@ class MainViewModel @Inject constructor(
     private val capturedImageUri: MutableStateFlow<Uri> = MutableStateFlow(Uri.EMPTY)
 
     fun onScreenLaunch() = viewModelScope.launch {
-        if (libraryRepository.getScannedQr().isNotEmpty()) {
-
+        val lastQr = libraryRepository.getScannedQr()
+        if (lastQr.isNotEmpty()) {
+            onQrReceived(lastQr)
         } else {
             getUserBooks()
         }
+    }
+
+    private fun onQrReceived(barcode: String) {
+        if (!books.value.any { it.metadata.isbn == "barcode" }) {
+            showQuestionDialog.value = true
+        } else {
+            books.value.firstOrNull { it.metadata.isbn == barcode }?.let {
+                onBookClick(it)
+            }
+            viewModelScope.launch { libraryRepository.updateScannedQr("") }
+        }
+    }
+
+    fun onCloseWarningDialog() {
+        showQuestionDialog.value = false
+        viewModelScope.launch { libraryRepository.updateScannedQr("") }
+    }
+
+    fun onConfirmAddBook() = viewModelScope.launch {
+        showQuestionDialog.value = false
+        val qr = libraryRepository.getScannedQr()
+        addBook(qr)
+        libraryRepository.updateScannedQr("")
     }
 
     private suspend fun getUserBooks() {
@@ -64,6 +88,14 @@ class MainViewModel @Inject constructor(
         processImage(uri)
     }
 
+    private fun addBook(barcode: String) = viewModelScope.launch {
+        libraryRepository.addBook(barcode, authPreference.rootGroupId)
+            .convertToDataState()
+            .doIfSuccess {
+                books.value = books.value.addToList(it)
+            }
+    }
+
     private fun processImage(uri: Uri) {
         try {
             val image =
@@ -73,13 +105,7 @@ class MainViewModel @Inject constructor(
                 .addOnSuccessListener { barcodes ->
                     if (barcodes.isNotEmpty()) {
                         barcodes.first().rawValue?.let { barcode ->
-                            viewModelScope.launch {
-                                libraryRepository.addBook(barcode, authPreference.rootGroupId)
-                                    .convertToDataState()
-                                    .doIfSuccess {
-                                        books.value = books.value.addToList(it)
-                                    }
-                            }
+                            addBook(barcode)
                         }
                     }
                 }

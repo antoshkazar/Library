@@ -17,4 +17,8 @@
     <string name="subgroup_name">Subgroup name</string>
     <string name="create">Create</string>
     <string name="nothing_found">Nothing to see here yet!</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="book_not_found">The book with following ISBN is not found in your library. Would you like to add it?</string>
 </resources>

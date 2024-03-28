@@ -1,5 +1,6 @@
 package com.library.providers.api.sevices.data
 
+import androidx.compose.runtime.mutableStateOf
 import com.library.data.models.books.BookMetadata
 import com.library.data.models.books.BookModel
 import com.library.data.models.groups.Group
@@ -7,14 +8,13 @@ import com.library.data.models.responses.LoginResponseModel
 import com.library.providers.api.handlers.ApiHandler
 import com.library.providers.api.handlers.NetworkResult
 import com.library.providers.api.sevices.ApiServices
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class LibraryRepositoryImpl @Inject constructor(
     private val apiServices: ApiServices
 ) : LibraryRepository, ApiHandler {
 
-    private val scannedQr = MutableStateFlow("")
+    private val scannedQr = mutableStateOf("")
 
     override suspend fun createClient(
         name: String,
@@ -83,7 +83,7 @@ class LibraryRepositoryImpl @Inject constructor(
         currentGroupId: String,
         targetGroupId: String
     ): NetworkResult<String> = handleApi {
-        apiServices.moveBook(bookId,currentGroupId, targetGroupId)
+        apiServices.moveBook(bookId, currentGroupId, targetGroupId)
     }
 
     override fun getScannedQr(): String {
@@ -91,7 +91,7 @@ class LibraryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateScannedQr(code: String) {
-        scannedQr.emit(code)
+        scannedQr.value = code
     }
 }
 

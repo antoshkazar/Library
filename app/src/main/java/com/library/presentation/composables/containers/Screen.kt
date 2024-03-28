@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.library.data.models.screen.Screens
 import com.library.presentation.BaseViewModel
+import com.library.presentation.composables.QuestionDialog
 
 data class ScaffoldUI(
     val modifier: Modifier = Modifier,
@@ -40,7 +41,10 @@ fun <T : BaseViewModel> Screen(
     LaunchedEffect(Unit) {
         onScreenLaunch()
     }
-
+    QuestionDialog(
+        ui = viewModel.questionData.value,
+        dialogOpened = viewModel.showQuestionDialog,
+    )
     val loaderUI by remember { viewModel.progressState }
     val tabBarItems = listOf(
         TabBarItem(

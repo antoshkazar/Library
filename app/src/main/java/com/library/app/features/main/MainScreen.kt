@@ -41,6 +41,7 @@ import com.library.core.extensions.createImageFile
 import com.library.data.models.screen.Screens
 import com.library.presentation.composables.EmptyView
 import com.library.presentation.composables.EmptyViewUI
+import com.library.presentation.composables.QuestionDialogUI
 import com.library.presentation.composables.books.AddBookView
 import com.library.presentation.composables.books.BookView
 import com.library.presentation.composables.containers.ScaffoldUI
@@ -97,6 +98,19 @@ fun MainScreen(
         } else {
             permissionLauncher.launch(Manifest.permission.CAMERA)
         }
+    }
+    val showQuestionDialog by remember {
+        viewModel.showQuestionDialog
+    }
+
+    if (showQuestionDialog) {
+        viewModel.questionData.value = QuestionDialogUI(
+            negativeButtonText = stringResource(id = R.string.cancel),
+            positiveAction = viewModel::onConfirmAddBook,
+            negativeAction = viewModel::onCloseWarningDialog,
+            dismissAction = viewModel::onCloseWarningDialog,
+            questionText = stringResource(id = R.string.book_not_found)
+        )
     }
 
     Screen(

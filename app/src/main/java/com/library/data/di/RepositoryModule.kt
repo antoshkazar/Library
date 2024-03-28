@@ -55,6 +55,7 @@ class RepositoryModule {
     }
 
     @Provides
+    @Singleton
     fun provideLibraryRepository(apiServices: ApiServices): LibraryRepository =
         LibraryRepositoryImpl(apiServices = apiServices)
 }
