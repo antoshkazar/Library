@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.library.app.navigation.route.BookRoute
 import com.library.app.navigation.route.GroupRoute
+import com.library.app.navigation.route.ScanQrRoute
 import com.library.core.extensions.addToList
 import com.library.core.extensions.doIfSuccess
 import com.library.core.extensions.replaceAllInList
@@ -40,7 +41,11 @@ class MainViewModel @Inject constructor(
     private val capturedImageUri: MutableStateFlow<Uri> = MutableStateFlow(Uri.EMPTY)
 
     fun onScreenLaunch() = viewModelScope.launch {
-        getUserBooks()
+        if (libraryRepository.getScannedQr().isNotEmpty()) {
+
+        } else {
+            getUserBooks()
+        }
     }
 
     private suspend fun getUserBooks() {
@@ -88,6 +93,10 @@ class MainViewModel @Inject constructor(
 
     fun onSearchTextChange(text: String) {
         searchText.value = text
+    }
+
+    fun onScanQrClick() {
+        routeNavigator.navigateToRoute(ScanQrRoute.route)
     }
 
     fun onToggleSearch() {

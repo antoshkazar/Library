@@ -11,6 +11,7 @@ import com.library.app.navigation.route.AuthRoute
 import com.library.app.navigation.route.BookRoute
 import com.library.app.navigation.route.GroupRoute
 import com.library.app.navigation.route.MainRoute
+import com.library.app.navigation.route.ScanQrRoute
 
 @Composable
 fun NavigationComponent(
@@ -28,5 +29,6 @@ fun NavigationComponent(
         MainRoute.composable(this, navHostController, windowSize)
         BookRoute.composable(this, navHostController, windowSize)
         GroupRoute.composable(this, navHostController, windowSize)
+        ScanQrRoute.composable(this, navHostController, windowSize)
     }
 }

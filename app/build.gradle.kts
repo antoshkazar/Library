@@ -60,8 +60,7 @@ dependencies {
     implementation(platform(Libs.BomCompose.bomCompose))
     implementation(Libs.BomCompose.composeTooling)
     implementation(Libs.BomCompose.materialWindowSize)
-//    implementation(Libs.Compose.lottie)
-//    implementation(Libs.Compose.lottieCompose)
+    implementation(Libs.Common.zxingAndroid)
 
     api(Libs.BomCompose.material3)
     api(Libs.BomCompose.ui)
@@ -141,6 +140,9 @@ object Libs {
     object Common {
         const val kotpref = "com.chibatching.kotpref:kotpref:${Versions.kotPref}"
         const val kotprefSupport = "com.chibatching.kotpref:livedata-support:${Versions.kotPref}"
+
+        const val zxingAndroid = "com.journeyapps:zxing-android-embedded:${Versions.zxingAndroid}"
+        const val zxingCore = "com.google.zxing:core:${Versions.zxingCore}"
     }
 
 }
@@ -167,4 +169,8 @@ object Versions {
     const val lottie = "6.4.0"
     const val bomCompose = "2023.08.00"
     const val accompanist = "0.32.0"
+
+
+    const val zxingAndroid = "4.3.0"
+    const val zxingCore = "3.5.3"
 }

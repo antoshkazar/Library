@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -181,6 +182,17 @@ fun MainScreen(
                         onClick = onAddBookClick,
                     ) {
                         Icon(Icons.Filled.Add, "Floating action button.")
+                    }
+                    FloatingActionButton(
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(start = 16.dp, bottom = 16.dp),
+                        onClick = viewModel::onScanQrClick,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_scan_barcode),
+                            "Scan barcode action button."
+                        )
                     }
                 }
             }
